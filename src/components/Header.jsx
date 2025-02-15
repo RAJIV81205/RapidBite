@@ -27,7 +27,7 @@ function Header() {
         </span>
       </div>
       <div className="h-full w-fit border-neutral/15 border-r-1 border-l-1 flex flex-col justify-center items-center px-[20px]">
-        <span className="text-xl font-roboto">Delivering in {time} Minutes</span>
+        <span className="text-xl font-roboto font-semibold">Delivering in {time} Minutes</span>
         <span className="text-xl font-roboto">
           {lat && lon ? `${lat}, ${lon}` : "Fetching location..."}
         </span>
@@ -36,7 +36,7 @@ function Header() {
         <input
           type="text"
           placeholder="Search milk"
-          className="w-[90%] border-1 border-neutral/15 py-2.5 rounded-3xl pl-1.5 bg-background/15"
+          className="w-[90%] border-1 border-neutral/15 py-2.5 rounded-3xl pl-5 bg-neutral/5 focus:outline-neutral/50"
         />
       </div>
     </header>
