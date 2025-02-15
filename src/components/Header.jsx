@@ -1,4 +1,10 @@
 function Header() {
+    const t = Math.floor(Math.random() * 100);
+    let time = 0
+    t>=10 ? time = t : time = `0${t}`
+
+
+
   return (
     <header className="fixed bg-background w-full h-[12vh] border-b-2 border-neutral/15 flex flex-row justify-center items-center">
       <div className="w-fit flex justify-center items-center h-full px-[20px]">
@@ -10,7 +16,7 @@ function Header() {
         </span>
       </div>
       <div className="h-full w-fit border-neutral/15 border-r-1 border-l-1 flex flex-col justify-center items-center px-[20px]">
-        <span className="text-xl font-roboto">Delivering in {Math.floor(Math.random() * 100)} Minutes</span>
+        <span className="text-xl font-roboto">Delivering in {time} Minutes</span>
         <span className="text-xl font-roboto">
                     
         </span>
