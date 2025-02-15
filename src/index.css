@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
-@layer theme {
-  :root {
-    --color-primary: #E53935; /* Energetic Red */
+
+
+@theme{
+    --color-primary: #E53935; 
     --color-secondary: #FF7043; /* Vibrant Orange */
     --color-accent: #FFC107; /* Bright Amber */
     --color-cool: #42A5F5; /* Vivid Blue */
     --color-neutral: #424242; /* Dark Gray */
     --color-background: #FFFFFF; /* White */
-  }
 }
