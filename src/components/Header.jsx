@@ -1,11 +1,13 @@
 import { User, Search, ShoppingCart, MapPin, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useCart } from "./CartContext";
 
 const Header = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [location, setLocation] = useState("Searching for location...");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { getCartCount, toggleCart } = useCart();
 
   useEffect(() => {
     getLocation();
@@ -130,11 +132,16 @@ const Header = () => {
           </button>
 
           {/* Cart */}
-          <button className="p-2 hover:bg-neutral-100 rounded-full transition-colors relative">
+          <button 
+            onClick={toggleCart}
+            className="p-2 hover:bg-neutral-100 rounded-full transition-colors relative"
+          >
             <ShoppingCart className="w-5 h-5 text-neutral-700" />
-            <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-              3
-            </span>
+            {getCartCount() > 0 && (
+              <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                {getCartCount()}
+              </span>
+            )}
           </button>
 
           {/* Profile */}
