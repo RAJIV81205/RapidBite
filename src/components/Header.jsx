@@ -1,104 +1,190 @@
-import { User, Search, ShoppingCart, MapPin } from "lucide-react";
+import { User, Search, ShoppingCart, MapPin, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
 const Header = () => {
-  const [location, setLocation] = useState("Loading location...");
-  const [deliveryTime, setDeliveryTime] = useState(null);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [location, setLocation] = useState("Searching for location...");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Calculate a realistic delivery time between 20-40 minutes
-    const baseTime = 20;
-    const variableTime = Math.floor(Math.random() * 20);
-    setDeliveryTime(baseTime + variableTime);
+    getLocation();
+  }, []);
 
-    let isMounted = true;
-
-    const getLocation = async (position) => {
-      try {
-        const response = await fetch(
-          `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=e31705e87534468cbe0063bb849f1d27`
-        );
-        const data = await response.json();
-        if (data.results && data.results[0] && isMounted) {
-          const address = data.results[0].components.city;
-          setLocation(address);
-        }
-      } catch (error) {
-        if (isMounted) {
-          setLocation("Location unavailable");
-        }
-      }
-    };
-
-    if ("geolocation" in navigator) {
+  const getLocation = () => {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        getLocation,
-        (error) => {
-          if (isMounted) {
-            setLocation("Location access denied");
+        async (position) => {
+          try {
+            const response = await fetch(
+              `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}%2C+${position.coords.longitude}&key=e31705e87534468cbe0063bb849f1d27`
+            );
+            const data = await response.json();
+            setLocation(`${data.results[0].components.city} , ${data.results[0].components.state}`);
+          } catch (error) {
+            console.log(error);
           }
+        },
+        (error) => {
+          console.log(error);
         }
       );
     } else {
-      setLocation("Geolocation not supported");
+      console.log("Geolocation is not supported by this browser.");
     }
+  };
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: -20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100
+      }
+    }
+  };
 
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-      className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm w-full h-[70px] border-b border-neutral/15 flex flex-row items-center px-4 z-50"
+      className="fixed top-0 left-0 right-0 bg-white shadow-sm w-full h-16 z-50"
     >
-      {/* Logo */}
-      <div className="flex items-center h-full px-6 border-r border-neutral/15">
-        <h1 className="text-2xl font-bold font-noto hover:scale-105 transition-transform cursor-pointer">
-          <span className="text-primary">Rapid</span>
-          <span className="text-secondary">Bite</span>
-        </h1>
-      </div>
+      <motion.div 
+        className="max-w-7xl mx-auto h-full px-4 flex items-center justify-between"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Left Section */}
+        <motion.div className="flex items-center gap-8" variants={itemVariants}>
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">R</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold">
+              <span className="text-primary">Rapid</span>
+              <span className="text-neutral-800">Bite</span>
+            </h1>
+          </div>
+        </motion.div>
 
-      {/* Location and Delivery Time */}
-      <div className="flex flex-col justify-center h-full px-6 border-r border-neutral/15 min-w-[250px] items-center">
-        <div className="flex items-center gap-2">
-          <MapPin className="w-6 h-6 text-primary" />
-          <p className="font-semibold text-lg truncate max-w-[200px]">{location}</p>
-        </div>
-        <p className=" text-neutral-600 font-roboto text-lg">
-          {deliveryTime ? `${deliveryTime} min delivery` : 'Calculating...'}
-        </p>
-      </div>
+        {/* Center Section - Search */}
+        <motion.div 
+          className="flex-1 max-w-2xl mx-4 sm:mx-8 hidden sm:block"
+          variants={itemVariants}
+        >
+          <div className={`relative transition-all duration-300 ${isSearchFocused ? "scale-105" : ""}`}>
+            <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
+            <input
+              type="text"
+              placeholder="What would you like to eat?"
+              className="w-full h-12 rounded-full border-2 border-neutral-200 pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-base placeholder:text-neutral-400"
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
+            />
+          </div>
+        </motion.div>
 
-      {/* Search */}
-      <div className="flex-1 flex items-center justify-center px-6 h-full">
-        <div className="relative w-full max-w-2xl">
-          <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+        {/* Right Section */}
+        <motion.div 
+          className="flex items-center gap-2 sm:gap-4"
+          variants={itemVariants}
+        >
+          {/* Location */}
+          <button className="hidden md:flex items-center gap-2 px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
+            <MapPin className="w-5 h-5 text-primary" />
+            <span className="text-sm font-medium text-neutral-700 truncate max-w-[150px]">
+              {location}
+            </span>
+          </button>
+
+          {/* Search Button for Mobile */}
+          <button 
+            className="sm:hidden p-2 hover:bg-neutral-100 rounded-full transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <Search className="w-5 h-5 text-neutral-700" />
+          </button>
+
+          {/* Notifications */}
+          <button className="p-2 hover:bg-neutral-100 rounded-full transition-colors relative">
+            <Bell className="w-5 h-5 text-neutral-700" />
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              2
+            </span>
+          </button>
+
+          {/* Cart */}
+          <button className="p-2 hover:bg-neutral-100 rounded-full transition-colors relative">
+            <ShoppingCart className="w-5 h-5 text-neutral-700" />
+            <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              3
+            </span>
+          </button>
+
+          {/* Profile */}
+          <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
+            <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-neutral-600" />
+            </div>
+            <span className="text-sm font-medium text-neutral-700 hidden md:inline">
+              John Doe
+            </span>
+          </button>
+        </motion.div>
+      </motion.div>
+
+      {/* Mobile Search */}
+      <motion.div 
+        className="sm:hidden px-4 py-2 bg-white border-t"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: isMobileMenuOpen ? 1 : 0, y: isMobileMenuOpen ? 0 : -20 }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="relative">
+          <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
           <input
             type="text"
-            placeholder="Search for food, drinks, and more..."
-            className="w-full h-10 rounded-full border border-neutral/15 pl-10 pr-4 outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all"
+            placeholder="What would you like to eat?"
+            className="w-full h-10 rounded-full border-2 border-neutral-200 pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-base placeholder:text-neutral-400"
           />
         </div>
-      </div>
+      </motion.div>
 
-      {/* Login */}
-      <button className="flex items-center gap-2 px-4 h-[42px] hover:bg-neutral-100 rounded-full transition-colors">
-        <User className="w-5 h-5 text-neutral-700" />
-        <span className="font-medium">Login</span>
-      </button>
-
-      {/* Cart */}
-      <button className="flex items-center gap-2 px-4 h-[42px] hover:bg-neutral-100 rounded-full transition-colors ml-2 relative">
-        <ShoppingCart className="w-5 h-5 text-neutral-700" />
-        <span className="font-medium">Cart</span>
-        <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-      </button>
+      {/* Mobile Menu */}
+      <motion.div 
+        className="sm:hidden bg-white border-t"
+        initial={{ opacity: 0, height: 0 }}
+        animate={{ 
+          opacity: isMobileMenuOpen ? 1 : 0,
+          height: isMobileMenuOpen ? "auto" : 0
+        }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="px-4 py-2">
+          <button className="w-full flex items-center gap-2 px-4 py-2 hover:bg-neutral-100 rounded-lg transition-colors">
+            <MapPin className="w-5 h-5 text-primary" />
+            <span className="text-sm font-medium text-neutral-700">
+              {location}
+            </span>
+          </button>
+        </div>
+      </motion.div>
     </motion.header>
   );
 };
