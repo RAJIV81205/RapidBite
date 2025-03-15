@@ -6,7 +6,7 @@
 
 
 @theme{
-    --color-primary: #E53935; 
+    --color-primary: #5edb3b; 
     --color-secondary: #FF7043; /* Vibrant Orange */
     --color-accent: #FFC107; /* Bright Amber */
     --color-cool: #42A5F5; /* Vivid Blue */
@@ -17,3 +17,6 @@
     --font-roboto: "Roboto", serif;
 }
 
+::-webkit-scrollbar{
+    display: none;
+}
