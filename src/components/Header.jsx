@@ -2,6 +2,7 @@ import { User, Search, ShoppingCart, MapPin, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useCart } from "./CartContext";
+import { Link } from "react-router";
 
 const Header = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -74,15 +75,17 @@ const Header = () => {
         {/* Left Section */}
         <motion.div className="flex items-center gap-8" variants={itemVariants}>
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">R</span>
+          <Link to="/">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">R</span>
             </div>
             <h1 className="text-xl sm:text-2xl font-bold">
               <span className="text-primary">Rapid</span>
               <span className="text-neutral-800">Bite</span>
             </h1>
           </div>
+          </Link>
         </motion.div>
 
         {/* Center Section - Search */}
