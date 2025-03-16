@@ -35,7 +35,7 @@ const allCategories = [
     id: 1,
     name: "Fresh Vegetables",
     icon: "🥬",
-    image: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=500",
+    image: "https://cdn.shopify.com/s/files/1/0445/1365/6985/files/fresh-vegetables.jpg?v=1638206015",
   },
   {
     id: 2,
@@ -99,14 +99,14 @@ const allCategories = [
   {
     id: 11,
     name: "Sexual Wellness",
-    icon: "🥣",
+    icon: "🙈",
     image:
       "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iauIvy8Ma974/v1/1200x800.jpg",
   },
   {
     id: 12,
     name: "Stationary",
-    icon: "🥣",
+    icon: "📝",
     image:
       "https://5.imimg.com/data5/XI/PZ/CQ/SELLER-89977312/stationary-goods-500x500.jpeg",
   },
@@ -483,7 +483,7 @@ const Home = () => {
                 initial={{ x: -50 }}
                 animate={{ x: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-2xl text-white/90"
+                className="text-2xl text-white/90 font-poppins"
               >
                 Get fresh groceries delivered in 30 minutes
               </motion.p>
@@ -520,8 +520,8 @@ const Home = () => {
               className="bg-white rounded-xl p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] text-center"
             >
               <div className="text-4xl mb-3">{feature.icon}</div>
-              <h3 className="font-semibold text-gray-800">{feature.title}</h3>
-              <p className="text-sm text-gray-600">{feature.description}</p>
+              <h3 className="font-semibold text-gray-800 font-poppins">{feature.title}</h3>
+              <p className="text-sm text-gray-600 font-poppins">{feature.description}</p>
             </motion.div>
           ))}
         </div>
@@ -532,7 +532,7 @@ const Home = () => {
             <h2 className="text-3xl font-bold text-gray-800">
               Shop By Category
             </h2>
-            <button className="text-green-600 font-semibold hover:text-green-700">
+            <button className="text-green-600 font-semibold hover:text-green-700 font-poppins">
               View All Categories →
             </button>
           </div>
@@ -559,7 +559,7 @@ const Home = () => {
                 </div>
                 <div className="p-4 text-center">
                   <span className="text-2xl mb-2 block">{category.icon}</span>
-                  <h3 className="font-medium text-gray-800">{category.name}</h3>
+                  <h3 className="font-medium text-gray-800 font-poppins">{category.name}</h3>
                 </div>
               </motion.div>
             ))}
@@ -582,11 +582,11 @@ const Home = () => {
                   <h3 className="text-2xl font-bold mb-3 text-white">
                     {banner.title}
                   </h3>
-                  <p className="text-sm text-white/90 font-medium">
+                  <p className="text-sm text-white/90 font-medium font-poppins">
                     {banner.subtitle}
                   </p>
                 </div>
-                <button className="bg-white/90 text-gray-800 px-6 py-2.5 rounded-xl w-fit hover:bg-white transition-colors">
+                <button className="bg-white/90 text-gray-800 px-6 py-2.5 rounded-xl w-fit hover:bg-white transition-colors font-poppins">
                   {banner.buttonText}
                 </button>
               </div>
@@ -606,7 +606,7 @@ const Home = () => {
         <div className="mb-16">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800">Best Deals</h2>
-            <button className="text-green-600 font-semibold hover:text-green-700">
+            <button className="text-green-600 font-semibold hover:text-green-700 font-poppins">
               View All Deals →
             </button>
           </div>
@@ -634,22 +634,22 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="p-3">
-                  <h3 className="font-medium text-gray-800 text-sm truncate">
+                  <h3 className="font-medium text-gray-800 text-sm truncate font-poppins">
                     {item.name}
                   </h3>
-                  <p className="text-xs text-gray-600 mb-2">{item.quantity}</p>
+                  <p className="text-xs text-gray-600 mb-2 font-poppins">{item.quantity}</p>
                   <div className="flex justify-between items-center">
                     <div className="flex flex-col">
-                      <span className="text-green-600 font-bold text-sm">
+                      <span className="text-green-600 font-bold text-sm font-poppins">
                         {item.price}
                       </span>
-                      <span className="text-xs text-gray-500 line-through">
+                      <span className="text-xs text-gray-500 line-through font-poppins ">
                         {item.originalPrice}
                       </span>
                     </div>
                     <button
                       onClick={() => addToCart(item)}
-                      className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors"
+                      className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors font-poppins"
                     >
                       Add to Cart
                     </button>
@@ -670,7 +670,7 @@ const Home = () => {
                   {category.name}
                 </h2>
               </div>
-              <button className="text-green-600 text-sm font-semibold hover:text-green-700">
+              <button className="text-green-600 text-sm font-semibold hover:text-green-700 font-poppins">
                 View All →
               </button>
             </div>
@@ -699,24 +699,24 @@ const Home = () => {
                       </div>
                     </div>
                     <div className="p-3">
-                      <h3 className="font-medium text-gray-800 text-sm truncate">
+                      <h3 className="font-medium text-gray-800 text-sm truncate font-poppins">
                         {product.name}
                       </h3>
-                      <p className="text-xs text-gray-600 mb-2">
+                      <p className="text-xs text-gray-600 mb-2 font-poppins">
                         {product.quantity}
                       </p>
                       <div className="flex justify-between items-center">
                         <div className="flex flex-col">
-                          <span className="text-green-600 font-bold text-sm">
+                          <span className="text-green-600 font-bold text-sm font-poppins">
                             {product.price}
                           </span>
-                          <span className="text-xs text-gray-500 line-through">
+                          <span className="text-xs text-gray-500 line-through font-poppins">
                             {product.originalPrice}
                           </span>
                         </div>
                         <button
                           onClick={() => addToCart(product)}
-                          className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors"
+                          className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors font-poppins"
                         >
                           Add to Cart
                         </button>
@@ -741,22 +741,22 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="text-5xl mb-4">🌟</div>
-              <h3 className="text-xl font-semibold mb-2">Quality Assured</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-2 font-poppins">Quality Assured</h3>
+              <p className="text-gray-600 font-poppins">
                 All products are carefully selected and quality checked
               </p>
             </div>
             <div className="text-center">
               <div className="text-5xl mb-4">⚡</div>
-              <h3 className="text-xl font-semibold mb-2">Express Delivery</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-2 font-poppins">Express Delivery</h3>
+              <p className="text-gray-600 font-poppins">
                 Get your groceries delivered within 30 minutes
               </p>
             </div>
             <div className="text-center">
               <div className="text-5xl mb-4">💰</div>
-              <h3 className="text-xl font-semibold mb-2">Best Prices</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-2 font-poppins">Best Prices</h3>
+              <p className="text-gray-600 font-poppins">
                 We offer competitive prices and regular discounts
               </p>
             </div>
