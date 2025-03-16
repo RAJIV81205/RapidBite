@@ -181,8 +181,7 @@ export const categoryProducts = {
             originalPrice: "₹35",
             discount: "15% off",
             quantity: "250g",
-            image:
-                "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=500",
+            image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=500",
         },
         {
             id: "v3",
@@ -191,8 +190,7 @@ export const categoryProducts = {
             originalPrice: "₹75",
             discount: "20% off",
             quantity: "500g",
-            image:
-                "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500",
+            image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500",
         },
         {
             id: "v4",
@@ -201,9 +199,44 @@ export const categoryProducts = {
             originalPrice: "₹45",
             discount: "22% off",
             quantity: "500g",
-            image:
-                "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=500",
+            image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=500",
         },
+        {
+            id: "v5",
+            name: "Fresh Cauliflower",
+            price: "₹45",
+            originalPrice: "₹55",
+            discount: "18% off",
+            quantity: "1 pc",
+            image: "https://images.unsplash.com/photo-1613743983303-b3e89f8a2b80?w=500",
+        },
+        {
+            id: "v6",
+            name: "Organic Potatoes",
+            price: "₹30",
+            originalPrice: "₹40",
+            discount: "25% off",
+            quantity: "1kg",
+            image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=500",
+        },
+        {
+            id: "v7",
+            name: "Fresh Cucumber",
+            price: "₹25",
+            originalPrice: "₹30",
+            discount: "17% off",
+            quantity: "500g",
+            image: "https://images.unsplash.com/photo-1604977042946-1eecc30f269e?w=500",
+        },
+        {
+            id: "v8",
+            name: "Red Onions",
+            price: "₹35",
+            originalPrice: "₹45",
+            discount: "22% off",
+            quantity: "1kg",
+            image: "https://images.unsplash.com/photo-1618512496248-a01b6e9b52f4?w=500",
+        }
     ],
     "2": [
         {
@@ -222,8 +255,7 @@ export const categoryProducts = {
             originalPrice: "₹50",
             discount: "20% off",
             quantity: "6 pcs",
-            image:
-                "https://images.unsplash.com/photo-1603833665858-e61d17a86224?w=500",
+            image: "https://images.unsplash.com/photo-1603833665858-e61d17a86224?w=500",
         },
         {
             id: "f3",
@@ -232,8 +264,7 @@ export const categoryProducts = {
             originalPrice: "₹100",
             discount: "20% off",
             quantity: "4 pcs",
-            image:
-                "https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=500",
+            image: "https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=500",
         },
         {
             id: "f4",
@@ -244,6 +275,42 @@ export const categoryProducts = {
             quantity: "1kg",
             image: "https://images.unsplash.com/photo-1553279768-865429fa0078?w=500",
         },
+        {
+            id: "f5",
+            name: "Fresh Strawberries",
+            price: "₹150",
+            originalPrice: "₹180",
+            discount: "17% off",
+            quantity: "250g",
+            image: "https://images.unsplash.com/photo-1518635017498-87f514b751ba?w=500",
+        },
+        {
+            id: "f6",
+            name: "Green Grapes",
+            price: "₹90",
+            originalPrice: "₹110",
+            discount: "18% off",
+            quantity: "500g",
+            image: "https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=500",
+        },
+        {
+            id: "f7",
+            name: "Pomegranate",
+            price: "₹130",
+            originalPrice: "₹160",
+            discount: "19% off",
+            quantity: "2 pcs",
+            image: "https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=500",
+        },
+        {
+            id: "f8",
+            name: "Kiwi",
+            price: "₹100",
+            originalPrice: "₹120",
+            discount: "17% off",
+            quantity: "3 pcs",
+            image: "https://images.unsplash.com/photo-1585059895524-72359e06133a?w=500",
+        }
     ],
     "3": [
         {
@@ -262,8 +329,7 @@ export const categoryProducts = {
             originalPrice: "₹110",
             discount: "18% off",
             quantity: "12 pcs",
-            image:
-                "https://images.unsplash.com/photo-1587486913049-53fc88980cfc?w=500",
+            image: "https://images.unsplash.com/photo-1587486913049-53fc88980cfc?w=500",
         },
         {
             id: "d3",
@@ -272,8 +338,7 @@ export const categoryProducts = {
             originalPrice: "₹65",
             discount: "23% off",
             quantity: "100g",
-            image:
-                "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=500",
+            image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=500",
         },
         {
             id: "d4",
@@ -282,9 +347,44 @@ export const categoryProducts = {
             originalPrice: "₹140",
             discount: "14% off",
             quantity: "200g",
-            image:
-                "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=500",
+            image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=500",
         },
+        {
+            id: "d5",
+            name: "Greek Yogurt",
+            price: "₹80",
+            originalPrice: "₹95",
+            discount: "16% off",
+            quantity: "400g",
+            image: "https://images.unsplash.com/photo-1570696516188-ade861b84a49?w=500",
+        },
+        {
+            id: "d6",
+            name: "Paneer",
+            price: "₹140",
+            originalPrice: "₹160",
+            discount: "13% off",
+            quantity: "200g",
+            image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500",
+        },
+        {
+            id: "d7",
+            name: "Mozzarella Cheese",
+            price: "₹180",
+            originalPrice: "₹220",
+            discount: "18% off",
+            quantity: "200g",
+            image: "https://images.unsplash.com/photo-1624806992066-5ffcf7ca186b?w=500",
+        },
+        {
+            id: "d8",
+            name: "Cream",
+            price: "₹45",
+            originalPrice: "₹55",
+            discount: "18% off",
+            quantity: "200ml",
+            image: "https://images.unsplash.com/photo-1563599175592-c58dc214deff?w=500",
+        }
     ],
     "4": [
         {
@@ -294,8 +394,7 @@ export const categoryProducts = {
             originalPrice: "₹50",
             discount: "20% off",
             quantity: "400g",
-            image:
-                "https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?w=500",
+            image: "https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?w=500",
         },
         {
             id: "b2",
@@ -322,9 +421,44 @@ export const categoryProducts = {
             originalPrice: "₹40",
             discount: "25% off",
             quantity: "4 pcs",
-            image:
-                "https://images.unsplash.com/photo-1587075417738-aa7e95cd7d8b?w=500",
+            image: "https://images.unsplash.com/photo-1587075417738-aa7e95cd7d8b?w=500",
         },
+        {
+            id: "b5",
+            name: "Garlic Bread",
+            price: "₹70",
+            originalPrice: "₹85",
+            discount: "18% off",
+            quantity: "250g",
+            image: "https://images.unsplash.com/photo-1619535860434-ba1d8fc47298?w=500",
+        },
+        {
+            id: "b6",
+            name: "Chocolate Cake",
+            price: "₹299",
+            originalPrice: "₹350",
+            discount: "15% off",
+            quantity: "500g",
+            image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500",
+        },
+        {
+            id: "b7",
+            name: "Donuts",
+            price: "₹99",
+            originalPrice: "₹120",
+            discount: "18% off",
+            quantity: "2 pcs",
+            image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500",
+        },
+        {
+            id: "b8",
+            name: "Fruit Cake",
+            price: "₹250",
+            originalPrice: "₹300",
+            discount: "17% off",
+            quantity: "400g",
+            image: "https://images.unsplash.com/photo-1607478900766-efe13248b125?w=500",
+        }
     ],
     "5": [
         {
@@ -334,8 +468,7 @@ export const categoryProducts = {
             originalPrice: "₹220",
             discount: "18% off",
             quantity: "1kg",
-            image:
-                "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500",
+            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500",
         },
         {
             id: "r2",
@@ -344,8 +477,7 @@ export const categoryProducts = {
             originalPrice: "₹150",
             discount: "20% off",
             quantity: "500g",
-            image:
-                "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500",
+            image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500",
         },
         {
             id: "r3",
@@ -354,8 +486,7 @@ export const categoryProducts = {
             originalPrice: "₹110",
             discount: "18% off",
             quantity: "500g",
-            image:
-                "https://images.unsplash.com/photo-1515543904379-3d757afe72a4?w=500",
+            image: "https://images.unsplash.com/photo-1515543904379-3d757afe72a4?w=500",
         },
         {
             id: "r4",
@@ -364,9 +495,120 @@ export const categoryProducts = {
             originalPrice: "₹180",
             discount: "17% off",
             quantity: "1kg",
-            image:
-                "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500",
+            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500",
         },
+        {
+            id: "r5",
+            name: "Red Kidney Beans",
+            price: "₹140",
+            originalPrice: "₹160",
+            discount: "13% off",
+            quantity: "500g",
+            image: "https://images.unsplash.com/photo-1551646375-88453d4b8b24?w=500",
+        },
+        {
+            id: "r6",
+            name: "Green Moong Dal",
+            price: "₹110",
+            originalPrice: "₹130",
+            discount: "15% off",
+            quantity: "500g",
+            image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500",
+        },
+        {
+            id: "r7",
+            name: "White Quinoa",
+            price: "₹299",
+            originalPrice: "₹350",
+            discount: "15% off",
+            quantity: "500g",
+            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500",
+        },
+        {
+            id: "r8",
+            name: "Black Urad Dal",
+            price: "₹130",
+            originalPrice: "₹150",
+            discount: "13% off",
+            quantity: "500g",
+            image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500",
+        }
+    ],
+    "6": [
+        {
+            id: "o1",
+            name: "Extra Virgin Olive Oil",
+            price: "₹599",
+            originalPrice: "₹699",
+            discount: "14% off",
+            quantity: "1L",
+            image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500",
+        },
+        {
+            id: "o2",
+            name: "Pure Ghee",
+            price: "₹499",
+            originalPrice: "₹599",
+            discount: "17% off",
+            quantity: "500ml",
+            image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500",
+        },
+        {
+            id: "o3",
+            name: "Sunflower Oil",
+            price: "₹180",
+            originalPrice: "₹210",
+            discount: "14% off",
+            quantity: "1L",
+            image: "https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=500",
+        },
+        {
+            id: "o4",
+            name: "Coconut Oil",
+            price: "₹299",
+            originalPrice: "₹350",
+            discount: "15% off",
+            quantity: "500ml",
+            image: "https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=500",
+        }
+    ],
+    "7": [
+        {
+            id: "sp1",
+            name: "Turmeric Powder",
+            price: "₹45",
+            originalPrice: "₹55",
+            discount: "18% off",
+            quantity: "100g",
+            image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=500",
+        },
+        {
+            id: "sp2",
+            name: "Red Chilli Powder",
+            price: "₹60",
+            originalPrice: "₹70",
+            discount: "14% off",
+            quantity: "100g",
+            image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500",
+        },
+        {
+            id: "sp3",
+            name: "Garam Masala",
+            price: "₹80",
+            originalPrice: "₹95",
+            discount: "16% off",
+            quantity: "100g",
+            image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500",
+        },
+        {
+            id: "sp4",
+            name: "Black Pepper",
+            price: "₹120",
+            originalPrice: "₹140",
+            discount: "14% off",
+            quantity: "100g",
+            image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500",
+        }
     ],
     "8": [
         {
@@ -376,8 +618,7 @@ export const categoryProducts = {
             originalPrice: "₹25",
             discount: "20% off",
             quantity: "100g",
-            image:
-                "https://images.unsplash.com/photo-1621447504864-d8686f12c84a?w=500",
+            image: "https://images.unsplash.com/photo-1621447504864-d8686f12c84a?w=500",
         },
         {
             id: "s2",
@@ -386,8 +627,7 @@ export const categoryProducts = {
             originalPrice: "₹220",
             discount: "18% off",
             quantity: "200g",
-            image:
-                "https://images.unsplash.com/photo-1536591375315-2a5b3f7a7d9a?w=500",
+            image: "https://images.unsplash.com/photo-1536591375315-2a5b3f7a7d9a?w=500",
         },
         {
             id: "s3",
@@ -396,8 +636,7 @@ export const categoryProducts = {
             originalPrice: "₹50",
             discount: "20% off",
             quantity: "150g",
-            image:
-                "https://images.unsplash.com/photo-1578849278002-014fa7c91ec7?w=500",
+            image: "https://images.unsplash.com/photo-1578849278002-014fa7c91ec7?w=500",
         },
         {
             id: "s4",
@@ -406,9 +645,44 @@ export const categoryProducts = {
             originalPrice: "₹40",
             discount: "25% off",
             quantity: "100g",
-            image:
-                "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=500",
+            image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=500",
         },
+        {
+            id: "s5",
+            name: "Dark Chocolate",
+            price: "₹150",
+            originalPrice: "₹180",
+            discount: "17% off",
+            quantity: "100g",
+            image: "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=500",
+        },
+        {
+            id: "s6",
+            name: "Trail Mix",
+            price: "₹199",
+            originalPrice: "₹240",
+            discount: "17% off",
+            quantity: "250g",
+            image: "https://images.unsplash.com/photo-1536591375315-2a5b3f7a7d9a?w=500",
+        },
+        {
+            id: "s7",
+            name: "Nachos",
+            price: "₹50",
+            originalPrice: "₹60",
+            discount: "17% off",
+            quantity: "150g",
+            image: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=500",
+        },
+        {
+            id: "s8",
+            name: "Protein Bars",
+            price: "₹80",
+            originalPrice: "₹95",
+            discount: "16% off",
+            quantity: "40g",
+            image: "https://images.unsplash.com/photo-1622484211817-92c99e732ec8?w=500",
+        }
     ],
     "9": [
         {
@@ -418,8 +692,7 @@ export const categoryProducts = {
             originalPrice: "₹100",
             discount: "20% off",
             quantity: "1L",
-            image:
-                "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=500",
+            image: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=500",
         },
         {
             id: "bv2",
@@ -428,8 +701,7 @@ export const categoryProducts = {
             originalPrice: "₹45",
             discount: "11% off",
             quantity: "500ml",
-            image:
-                "https://images.unsplash.com/photo-1527960471264-932f39eb0f96?w=500",
+            image: "https://images.unsplash.com/photo-1527960471264-932f39eb0f96?w=500",
         },
         {
             id: "bv3",
@@ -438,8 +710,7 @@ export const categoryProducts = {
             originalPrice: "₹180",
             discount: "17% off",
             quantity: "25 bags",
-            image:
-                "https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?w=500",
+            image: "https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?w=500",
         },
         {
             id: "bv4",
@@ -450,5 +721,191 @@ export const categoryProducts = {
             quantity: "1L",
             image: "https://images.unsplash.com/photo-1560023907-5f339617ea30?w=500",
         },
+        {
+            id: "bv5",
+            name: "Mango Smoothie",
+            price: "₹120",
+            originalPrice: "₹140",
+            discount: "14% off",
+            quantity: "500ml",
+            image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=500",
+        },
+        {
+            id: "bv6",
+            name: "Energy Drink",
+            price: "₹95",
+            originalPrice: "₹110",
+            discount: "14% off",
+            quantity: "250ml",
+            image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500",
+        },
+        {
+            id: "bv7",
+            name: "Coconut Water",
+            price: "₹50",
+            originalPrice: "₹60",
+            discount: "17% off",
+            quantity: "200ml",
+            image: "https://images.unsplash.com/photo-1525385133512-2f3bdd039054?w=500",
+        },
+        {
+            id: "bv8",
+            name: "Lemonade",
+            price: "₹60",
+            originalPrice: "₹70",
+            discount: "14% off",
+            quantity: "500ml",
+            image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=500",
+        }
     ],
+    "10": [
+        {
+            id: "if1",
+            name: "Cup Noodles",
+            price: "₹40",
+            originalPrice: "₹50",
+            discount: "20% off",
+            quantity: "70g",
+            image: "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=500",
+        },
+        {
+            id: "if2",
+            name: "Instant Pasta",
+            price: "₹80",
+            originalPrice: "₹95",
+            discount: "16% off",
+            quantity: "80g",
+            image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=500",
+        },
+        {
+            id: "if3",
+            name: "Ready to Eat Dal",
+            price: "₹90",
+            originalPrice: "₹110",
+            discount: "18% off",
+            quantity: "300g",
+            image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500",
+        },
+        {
+            id: "if4",
+            name: "Instant Poha",
+            price: "₹50",
+            originalPrice: "₹60",
+            discount: "17% off",
+            quantity: "150g",
+            image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=500",
+        }
+    ],
+    "11": [
+        {
+            id: "sw1",
+            name: "Condoms (Pack of 3)",
+            price: "₹120",
+            originalPrice: "₹150",
+            discount: "20% off",
+            quantity: "3 pcs",
+            image: "https://images.unsplash.com/photo-1584655422400-b54d42f88468?w=500",
+        },
+        {
+            id: "sw2",
+            name: "Personal Lubricant",
+            price: "₹250",
+            originalPrice: "₹300",
+            discount: "17% off",
+            quantity: "50ml",
+            image: "https://images.unsplash.com/photo-1584655422400-b54d42f88468?w=500",
+        },
+        {
+            id: "sw3",
+            name: "Intimate Wipes",
+            price: "₹180",
+            originalPrice: "₹220",
+            discount: "18% off",
+            quantity: "20 pcs",
+            image: "https://images.unsplash.com/photo-1584655422400-b54d42f88468?w=500",
+        },
+        {
+            id: "sw4",
+            name: "Pregnancy Test Kit",
+            price: "₹150",
+            originalPrice: "₹180",
+            discount: "17% off",
+            quantity: "1 pc",
+            image: "https://images.unsplash.com/photo-1584655422400-b54d42f88468?w=500",
+        }
+    ],
+    "12": [
+        {
+            id: "st1",
+            name: "Notebook Set",
+            price: "₹120",
+            originalPrice: "₹150",
+            discount: "20% off",
+            quantity: "3 pcs",
+            image: "https://images.unsplash.com/photo-1531346680769-a1d79b57de5c?w=500",
+        },
+        {
+            id: "st2",
+            name: "Pen Set",
+            price: "₹80",
+            originalPrice: "₹100",
+            discount: "20% off",
+            quantity: "5 pcs",
+            image: "https://images.unsplash.com/photo-1595079015102-85c7fc8c3a9a?w=500",
+        },
+        {
+            id: "st3",
+            name: "Pencil Box",
+            price: "₹150",
+            originalPrice: "₹180",
+            discount: "17% off",
+            quantity: "1 pc",
+            image: "https://images.unsplash.com/photo-1596495717764-0e0fd5992e5b?w=500",
+        },
+        {
+            id: "st4",
+            name: "Sticky Notes",
+            price: "₹60",
+            originalPrice: "₹75",
+            discount: "20% off",
+            quantity: "100 sheets",
+            image: "https://images.unsplash.com/photo-1531346680769-a1d79b57de5c?w=500",
+        },
+        {
+            id: "st5",
+            name: "Highlighters",
+            price: "₹90",
+            originalPrice: "₹110",
+            discount: "18% off",
+            quantity: "4 pcs",
+            image: "https://images.unsplash.com/photo-1595079015102-85c7fc8c3a9a?w=500",
+        },
+        {
+            id: "st6",
+            name: "Calculator",
+            price: "₹199",
+            originalPrice: "₹250",
+            discount: "20% off",
+            quantity: "1 pc",
+            image: "https://images.unsplash.com/photo-1574607383476-f517f260d30b?w=500",
+        },
+        {
+            id: "st7",
+            name: "Stapler Set",
+            price: "₹85",
+            originalPrice: "₹100",
+            discount: "15% off",
+            quantity: "1 set",
+            image: "https://images.unsplash.com/photo-1596495717764-0e0fd5992e5b?w=500",
+        },
+        {
+            id: "st8",
+            name: "File Folders",
+            price: "₹120",
+            originalPrice: "₹150",
+            discount: "20% off",
+            quantity: "5 pcs",
+            image: "https://images.unsplash.com/photo-1531346680769-a1d79b57de5c?w=500",
+        }
+    ]
 }; 

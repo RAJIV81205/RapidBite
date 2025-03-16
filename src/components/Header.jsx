@@ -4,11 +4,40 @@ import { useState, useEffect } from "react";
 import { useCart } from "./CartContext";
 import { Link } from "react-router";
 
+
 const Header = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [location, setLocation] = useState("Searching for location...");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { getCartCount, toggleCart } = useCart();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const token = localStorage.getItem("token");
+  const url = import.meta.env.VITE_BACKEND_URL;
+
+  const verifyToken = async () => {
+    try {
+      const response = await fetch(`${url}/verify`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      setIsLoggedIn(true);
+      setUser(data.user);
+    } catch (error) {
+      setIsLoggedIn(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!token) {
+      setIsLoggedIn(false);
+    } else {
+      verifyToken()
+    }
+  }, [token]);
 
   useEffect(() => {
     getLocation();
@@ -23,7 +52,9 @@ const Header = () => {
               `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}%2C+${position.coords.longitude}&key=e31705e87534468cbe0063bb849f1d27`
             );
             const data = await response.json();
-            setLocation(`${data.results[0].components.city} , ${data.results[0].components.state}`);
+            setLocation(
+              `${data.results[0].components.city} , ${data.results[0].components.state}`
+            );
           } catch (error) {
             console.log(error);
           }
@@ -42,9 +73,9 @@ const Header = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
@@ -54,9 +85,9 @@ const Header = () => {
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 100
-      }
-    }
+        stiffness: 100,
+      },
+    },
   };
 
   return (
@@ -66,7 +97,7 @@ const Header = () => {
       transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
       className="fixed top-0 left-0 right-0 bg-white shadow-sm w-full h-16 z-50"
     >
-      <motion.div 
+      <motion.div
         className="max-w-7xl mx-auto h-full px-4 flex items-center justify-between"
         variants={containerVariants}
         initial="hidden"
@@ -79,21 +110,25 @@ const Header = () => {
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">R</span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold">
+                <span className="text-primary">Rapid</span>
+                <span className="text-neutral-800">Bite</span>
+              </h1>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold">
-              <span className="text-primary">Rapid</span>
-              <span className="text-neutral-800">Bite</span>
-            </h1>
-          </div>
           </Link>
         </motion.div>
 
         {/* Center Section - Search */}
-        <motion.div 
+        <motion.div
           className="flex-1 max-w-2xl mx-4 sm:mx-8 hidden sm:block"
           variants={itemVariants}
         >
-          <div className={`relative transition-all duration-300 ${isSearchFocused ? "scale-105" : ""}`}>
+          <div
+            className={`relative transition-all duration-300 ${
+              isSearchFocused ? "scale-105" : ""
+            }`}
+          >
             <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
             <input
               type="text"
@@ -106,7 +141,7 @@ const Header = () => {
         </motion.div>
 
         {/* Right Section */}
-        <motion.div 
+        <motion.div
           className="flex items-center gap-2 sm:gap-4"
           variants={itemVariants}
         >
@@ -119,7 +154,7 @@ const Header = () => {
           </button>
 
           {/* Search Button for Mobile */}
-          <button 
+          <button
             className="sm:hidden p-2 hover:bg-neutral-100 rounded-full transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
@@ -135,7 +170,7 @@ const Header = () => {
           </button>
 
           {/* Cart */}
-          <button 
+          <button
             onClick={toggleCart}
             className="p-2 hover:bg-neutral-100 rounded-full transition-colors relative"
           >
@@ -148,22 +183,40 @@ const Header = () => {
           </button>
 
           {/* Profile */}
-          <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
-            <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
-              <User className="w-4 h-4 text-neutral-600" />
-            </div>
-            <span className="text-sm font-medium text-neutral-700 hidden md:inline">
-              John Doe
-            </span>
-          </button>
+          {isLoggedIn ? (
+            <Link to="/profile">
+              <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
+                <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-neutral-600" />
+                  </div>
+                <span className="text-sm font-medium text-neutral-700 hidden md:inline">
+                  {user.name}
+                </span>
+              </button>
+            </Link>
+          ) : (
+            <Link to="/auth">
+              <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
+                <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-neutral-600" />
+                  </div>
+                <span className="text-sm font-medium text-neutral-700 hidden md:inline">
+                  Login
+                </span>
+              </button>
+            </Link>
+          )}
         </motion.div>
       </motion.div>
 
       {/* Mobile Search */}
-      <motion.div 
+      <motion.div
         className="sm:hidden px-4 py-2 bg-white border-t"
         initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: isMobileMenuOpen ? 1 : 0, y: isMobileMenuOpen ? 0 : -20 }}
+        animate={{
+          opacity: isMobileMenuOpen ? 1 : 0,
+          y: isMobileMenuOpen ? 0 : -20,
+        }}
         transition={{ duration: 0.2 }}
       >
         <div className="relative">
@@ -177,12 +230,12 @@ const Header = () => {
       </motion.div>
 
       {/* Mobile Menu */}
-      <motion.div 
+      <motion.div
         className="sm:hidden bg-white border-t"
         initial={{ opacity: 0, height: 0 }}
-        animate={{ 
+        animate={{
           opacity: isMobileMenuOpen ? 1 : 0,
-          height: isMobileMenuOpen ? "auto" : 0
+          height: isMobileMenuOpen ? "auto" : 0,
         }}
         transition={{ duration: 0.2 }}
       >

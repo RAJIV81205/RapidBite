@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router";
 import Home from "./components/pages/Home";
 import Items from "./components/pages/Items";
 import ScrollToTop from "./components/ScrollToTop";
-
+import Auth from "./components/pages/Auth";
 function App() {
   return (
     <CartProvider>
@@ -16,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" index element={<Home />} />
           <Route path="/items/:categoryId" element={<Items />} />
+          <Route path="/auth" element={<Auth />} />
         </Routes>
         <Footer />
       </Router>
