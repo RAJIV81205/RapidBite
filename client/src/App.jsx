@@ -8,6 +8,7 @@ import Items from "./components/pages/Items";
 import ScrollToTop from "./components/ScrollToTop";
 import Auth from "./components/pages/Auth";
 import NotFound from "./components/pages/404";
+import Profile from "./components/pages/Profile";
 function App() {
   return (
     <CartProvider>
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" index element={<Home />} />
           <Route path="/items/:categoryId" element={<Items />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
