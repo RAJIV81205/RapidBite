@@ -27,7 +27,9 @@ const UserSchema = new mongoose.Schema({
     name: String,
     email: { type: String, unique: true },
     password: String,
-    mobile: {type: String, unique: true , default: null},
+    googleId: { type: String, sparse: true,default: null },
+    githubId: { type: String, sparse: true, default: null },
+    mobile: {type: String, unique: true, sparse: true, default: null},
     gender: {type: String, default: null},
     state: {type: String, default: null},
     city: {type: String, default: null},
@@ -156,6 +158,88 @@ app.put("/update-profile", verifyToken, async (req, res) => {
         res.status(200).json({ message: "Profile updated successfully", user: userWithoutPassword });
     } catch (error) {
         console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+app.post("/google-login", async (req, res) => {
+    try {
+        const { email, name, googleId } = req.body;
+        
+        // Validate required fields
+        if (!email || !name || !googleId) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        // Check if user already exists with googleId
+        const existingUser = await User.findOne({ googleId });
+        if (existingUser) {
+            const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            return res.status(200).json({ message: "Login successful", token });
+        }
+
+        // Check if user already exists with email
+        const existingUserByEmail = await User.findOne({ email });
+        if (existingUserByEmail) {
+            // Update existing user with googleId
+            existingUserByEmail.googleId = googleId;
+            await existingUserByEmail.save();
+            const token = jwt.sign({ userId: existingUserByEmail._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            return res.status(200).json({ message: "Login successful", token });
+        }
+
+        // Create new user
+        const newUser = new User({ email, name, googleId });
+        await newUser.save();
+
+        const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+        console.error('Google login error:', error);
+        if (error.code === 11000) {
+            return res.status(400).json({ message: "Email or Google ID already exists" });
+        }
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+app.post("/github-login", async (req, res) => {
+    try {
+        const { email, name, githubId } = req.body;
+        
+        // Validate required fields
+        if (!email || !name || !githubId) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        // Check if user already exists with githubId   
+        const existingUser = await User.findOne({ githubId });
+        if (existingUser) {
+            const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            return res.status(200).json({ message: "Login successful", token });
+        }       
+
+        // Check if user already exists with email
+        const existingUserByEmail = await User.findOne({ email });
+        if (existingUserByEmail) {
+            // Update existing user with githubId
+            existingUserByEmail.githubId = githubId;
+            await existingUserByEmail.save();
+            const token = jwt.sign({ userId: existingUserByEmail._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            return res.status(200).json({ message: "Login successful", token });
+        }
+
+        // Create new user
+        const newUser = new User({ email, name, githubId });
+        await newUser.save();
+
+        const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+        console.error('GitHub login error:', error);
+        if (error.code === 11000) {
+            return res.status(400).json({ message: "Email or GitHub ID already exists" });
+        }
         res.status(500).json({ message: "Internal server error" });
     }
 });
