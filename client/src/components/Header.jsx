@@ -2,22 +2,25 @@ import { User, Search, ShoppingCart, MapPin, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useCart } from "./CartContext";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 
 const Header = () => {
+  const currentLocation = useLocation();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [location, setLocation] = useState("Searching for location...");
+  const [userLocation, setUserLocation] = useState("Searching for location...");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { getCartCount, toggleCart } = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const token = localStorage.getItem("token");
   const url = import.meta.env.VITE_BACKEND_URL;
 
   const verifyToken = async () => {
     try {
+      setIsLoading(true);
       if (!token) {
         setIsLoggedIn(false);
         setUser(null);
@@ -35,7 +38,6 @@ const Header = () => {
       const data = await response.json();
       
       if (!response.ok) {
-        // If token is invalid or expired, clear it
         localStorage.removeItem("token");
         setIsLoggedIn(false);
         setUser(null);
@@ -49,16 +51,14 @@ const Header = () => {
       localStorage.removeItem("token");
       setIsLoggedIn(false);
       setUser(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!token) {
-      setIsLoggedIn(false);
-    } else {
-      verifyToken()
-    }
-  }, [token]);
+    verifyToken();
+  }, [token, currentLocation.pathname]);
 
   useEffect(() => {
     getLocation();
@@ -73,7 +73,7 @@ const Header = () => {
               `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}%2C+${position.coords.longitude}&key=e31705e87534468cbe0063bb849f1d27`
             );
             const data = await response.json();
-            setLocation(
+            setUserLocation(
               `${data.results[0].components.city} , ${data.results[0].components.state}`
             );
           } catch (error) {
@@ -170,7 +170,7 @@ const Header = () => {
           <button className="hidden md:flex items-center gap-2 px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
             <MapPin className="w-5 h-5 text-primary" />
             <span className="text-sm font-medium text-neutral-700 truncate max-w-[150px]">
-              {location}
+              {userLocation}
             </span>
           </button>
 
@@ -204,17 +204,16 @@ const Header = () => {
           </button>
 
           {/* Profile */}
-          {isLoggedIn ? (
-            
+          {isLoading ? (
+            <div className="w-8 h-8 bg-neutral-200 rounded-full animate-pulse" />
+          ) : isLoggedIn ? (
             <Link to="/profile">
-              {console.log(user)}
-
               <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
                 <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-neutral-600" />
-                  </div>
+                </div>
                 <span className="text-sm font-medium text-neutral-700 hidden md:inline">
-                  {user.name}
+                  {user?.name || 'User'}
                 </span>
               </button>
             </Link>
@@ -223,7 +222,7 @@ const Header = () => {
               <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
                 <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-neutral-600" />
-                  </div>
+                </div>
                 <span className="text-sm font-medium text-neutral-700 hidden md:inline">
                   Login
                 </span>
@@ -267,7 +266,7 @@ const Header = () => {
           <button className="w-full flex items-center gap-2 px-4 py-2 hover:bg-neutral-100 rounded-lg transition-colors">
             <MapPin className="w-5 h-5 text-primary" />
             <span className="text-sm font-medium text-neutral-700">
-              {location}
+              {userLocation}
             </span>
           </button>
         </div>

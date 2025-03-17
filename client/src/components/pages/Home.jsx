@@ -9,7 +9,7 @@ const Home = () => {
   const { addToCart } = useCart();
 
   return (
-    <div className="min-h-screen bg-gray-50 mt-15">
+    <div className="min-h-screen bg-transparent mt-15">
       <div className="max-w-[80%] mx-auto py-6">
         {/* Main Banner */}
         <motion.div

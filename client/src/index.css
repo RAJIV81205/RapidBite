@@ -22,3 +22,14 @@
 ::-webkit-scrollbar{
     display: none;
 }
+
+body{
+    background-color: rgba(246, 244, 244, 0.427);
+}
+
+#root{
+    background-image: url('/bg.png');
+
+
+
+}
