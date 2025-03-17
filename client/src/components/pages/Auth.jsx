@@ -15,6 +15,7 @@ const Auth = () => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const url = import.meta.env.VITE_BACKEND_URL;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,13 +26,51 @@ const Auth = () => {
             if (!isLogin && password !== confirmPassword) {
                 throw new Error('Passwords do not match');
             }
-
-            // Add your authentication logic here
+            else if(isLogin){
+                try{
+                    const response = await fetch(`${url}/login`, {
+                        method: 'POST',
+                        body: JSON.stringify({ email, password }),
+                        headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }); 
+                const data = await response.json();
+                if(data.token){
+                    alert(data.message);
+                    localStorage.setItem('token', data.token);
+                    navigate('/');
+                }
+                else{
+                    alert(data.message);
+                }
+                }catch(error){
+                    setError(error.message);
+                }
+            }
+            else{
+                try{
+                    const response = await fetch(`${url}/signup`, {
+                        method: 'POST',
+                        body: JSON.stringify({ name, email, password }),
+                        headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                if(response.ok){
+                    navigate('/auth');
+                    alert(data.message);
+                }
+                }catch(error){
+                    setError(error.message);
+                }
+            }
             
-            // For demo purposes, simulating API call
+                // For demo purposes, simulating API call
             await new Promise(resolve => setTimeout(resolve, 1000));
             
-            navigate('/');
+            
         } catch (err) {
             setError(err.message);
         } finally {
