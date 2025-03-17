@@ -29,6 +29,13 @@ const UserSchema = new mongoose.Schema({
     name: String,
     email: { type: String, unique: true },
     password: String,
+    mobile: {type: String, unique: true , default: null},
+    gender: {type: String, default: null},
+    state: {type: String, default: null},
+    city: {type: String, default: null},
+    address: {type: String, default: null},
+    pincode: {type: String, default: null},
+    profileImage: {type: String, default: null},
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 });

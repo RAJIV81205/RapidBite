@@ -58,7 +58,7 @@ const Header = () => {
     } else {
       verifyToken()
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     getLocation();
@@ -205,7 +205,10 @@ const Header = () => {
 
           {/* Profile */}
           {isLoggedIn ? (
+            
             <Link to="/profile">
+              {console.log(user)}
+
               <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
                 <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-neutral-600" />
