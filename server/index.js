@@ -75,18 +75,34 @@ app.post("/login", async (req, res) => {
 
 app.post("/verify-token", async (req, res) => {
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(400).json({ message: "Token not found" });
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ message: "No authorization header found" });
         }
+
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ message: "No token found" });
+        }
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.userId);
+        
         if (!user) {
-            return res.status(400).json({ message: "User not found" });
+            return res.status(404).json({ message: "User not found" });
         }
-        res.status(200).json({ message: "Token is valid", user });
+
+        // Don't send the password in the response
+        const { password, ...userWithoutPassword } = user.toObject();
+        res.status(200).json({ message: "Token is valid", user: userWithoutPassword });
     } catch (error) {
         console.log(error);
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: "Invalid token" });
+        }
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: "Token has expired" });
+        }
         res.status(500).json({ message: "Internal server error" });
     }
 });

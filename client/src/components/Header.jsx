@@ -18,16 +18,37 @@ const Header = () => {
 
   const verifyToken = async () => {
     try {
-      const response = await fetch(`${url}/verify`, {
+      if (!token) {
+        setIsLoggedIn(false);
+        setUser(null);
+        return;
+      }
+
+      const response = await fetch(`${url}/verify-token`, {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
+
       const data = await response.json();
+      
+      if (!response.ok) {
+        // If token is invalid or expired, clear it
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+        setUser(null);
+        return;
+      }
+
       setIsLoggedIn(true);
       setUser(data.user);
     } catch (error) {
+      console.error("Token verification error:", error);
+      localStorage.removeItem("token");
       setIsLoggedIn(false);
+      setUser(null);
     }
   };
 
@@ -37,7 +58,7 @@ const Header = () => {
     } else {
       verifyToken()
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     getLocation();
