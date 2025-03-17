@@ -80,7 +80,7 @@ const Auth = () => {
                         transition={{ delay: 0.2 }}
                         className="text-center mb-8"
                     >
-                        <h1 className="text-3xl font-bold text-gray-800">
+                        <h1 className="text-3xl font-bold text-gray-800 font-poppins">
                             {isLogin ? 'Welcome Back!' : 'Create Account'}
                         </h1>
                         <p className="text-gray-600 mt-2">
@@ -130,7 +130,7 @@ const Auth = () => {
                                     fill="#EA4335"
                                 />
                             </svg>
-                            <span className="text-gray-700 font-medium">
+                            <span className="text-gray-700 font-medium font-poppins">
                                 Continue with Google
                             </span>
                         </button>
@@ -141,7 +141,7 @@ const Auth = () => {
                             className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
                         >
                             <Github className="w-5 h-5" />
-                            <span className="text-gray-700 font-medium">
+                            <span className="text-gray-700 font-medium font-poppins">
                                 Continue with GitHub
                             </span>
                         </button>
@@ -273,10 +273,10 @@ const Auth = () => {
                                         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                                         className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                                     />
-                                    <span>Processing...</span>
+                                    <span className="font-poppins">Processing...</span>
                                 </>
                             ) : (
-                                <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
+                                <span className="font-poppins">{isLogin ? 'Sign In' : 'Create Account'}</span>
                             )}
                         </motion.button>
 
