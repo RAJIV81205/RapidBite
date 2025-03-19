@@ -140,6 +140,7 @@ const Auth = () => {
         try {
             const provider = new GithubAuthProvider();
             const result = await signInWithPopup(auth, provider);
+            console.log(result);
             const response = await fetch(`${url}/github-login`, {
                 method: 'POST',
                 headers: {

@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
     password: String,
     googleId: { type: String, sparse: true,default: null },
     githubId: { type: String, sparse: true, default: null },
-    mobile: {type: String, unique: true, sparse: true, default: null},
+    mobile: {type: String, sparse: true, default: null},
     gender: {type: String, default: null},
     state: {type: String, default: null},
     city: {type: String, default: null},
