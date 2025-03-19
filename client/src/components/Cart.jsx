@@ -33,7 +33,7 @@ const Cart = () => {
         >
           <div className="flex flex-col h-full">
             {/* Cart Header */}
-            <div className="p-4 border-b">
+            <div className="p-4 sm:p-6 border-b">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Shopping Cart</h2>
                 <button
@@ -48,7 +48,7 @@ const Cart = () => {
             </div>
 
             {/* Cart Items */}
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
               {cartItems.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-gray-500">Your cart is empty</p>
@@ -58,12 +58,12 @@ const Cart = () => {
                   {cartItems.map(item => (
                     <div
                       key={item.id}
-                      className="flex items-center gap-4 bg-white p-3 rounded-lg border"
+                      className="flex items-center gap-4 bg-white p-3 sm:p-4 rounded-lg border"
                     >
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-20 h-20 object-cover rounded-md"
+                        className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md"
                       />
                       <div className="flex-1">
                         <h3 className="font-medium">{item.name}</h3>
@@ -75,14 +75,14 @@ const Cart = () => {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
+                              className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
                             >
                               -
                             </button>
-                            <span className="w-8 text-center">{item.quantity}</span>
+                            <span className="w-6 sm:w-8 text-center">{item.quantity}</span>
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
+                              className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
                             >
                               +
                             </button>
@@ -105,7 +105,7 @@ const Cart = () => {
 
             {/* Cart Footer */}
             {cartItems.length > 0 && (
-              <div className="border-t p-4">
+              <div className="border-t p-4 sm:p-6">
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-semibold">Total:</span>
                   <span className="text-lg font-semibold">₹{getCartTotal()}</span>

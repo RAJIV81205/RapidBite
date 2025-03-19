@@ -129,8 +129,8 @@ const Header = () => {
           {/* Logo */}
           <Link to="/">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">R</span>
+              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                <img src="/logo.png" alt="logo" className="w-100% h-full object-cover" />
               </div>
               <h1 className="text-xl sm:text-2xl font-bold">
                 <span className="text-primary">Rapid</span>
