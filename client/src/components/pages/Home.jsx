@@ -85,6 +85,7 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {allCategories.map((category) => (
+              <Link to={`/items/${category.id}`}>
               <motion.div
                 key={category.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -109,6 +110,7 @@ const Home = () => {
                   <h3 className="font-medium text-gray-800 font-poppins">{category.name}</h3>
                 </div>
               </motion.div>
+              </Link>
             ))}
           </div>
         </div>
