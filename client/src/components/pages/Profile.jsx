@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, ShoppingBag, LogOut, Settings, Heart, Save, X } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -334,7 +334,7 @@ const Profile = () => {
         );
       case 'orders':
         return (
-          <div className="p-6">
+          <div className="p-6 font-poppins">
             <h2 className="text-2xl font-bold mb-4">My Orders</h2>
             <div className="bg-white rounded-lg shadow p-6">
               {isLoading ? (
@@ -347,7 +347,8 @@ const Profile = () => {
                 <div className="text-gray-500 text-center py-4">No orders found</div>
               ) : (
                 orders.map((order) => (
-                  <div key={order._id || order.id} className="border-b py-4 last:border-b-0">
+                  <Link to={`/track/${order._id}`} key={order._id || order.id}>
+                  <div key={order._id || order.id} className="border-b py-4 last:border-b-0 ">
                     <div className="flex justify-between items-center">
                       <div>
                         <p className="font-medium">Order #{order.orderId || order._id}</p>
@@ -357,7 +358,7 @@ const Profile = () => {
                       </div>
                       <div className="text-right">
                         <p className="font-medium">
-                          ${(order.total || 0).toFixed(2)}
+                         ₹{(order.totalAmount || 0).toFixed(2)}
                         </p>
                         <p className={`text-sm ${
                           order.status === 'delivered' ? 'text-green-500' :
@@ -369,6 +370,7 @@ const Profile = () => {
                       </div>
                     </div>
                   </div>
+                  </Link>
                 ))
               )}
             </div>

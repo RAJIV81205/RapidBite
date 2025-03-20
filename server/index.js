@@ -303,6 +303,22 @@ app.get('/orders', verifyToken, async (req, res) => {
     }
 });
 
+app.get('/orders/:orderId', verifyToken, async (req, res) => {
+    try {
+        const order = await Order.findOne({ _id: req.params.orderId });
+        if (!order) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+        if (order.userId.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Unauthorized" });
+        }
+        res.status(200).json({ order });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 const generateOrderId = () => {
     return Math.floor(Math.random() * 10000000);
 };  
