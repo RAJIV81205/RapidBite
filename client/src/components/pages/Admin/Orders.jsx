@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import { Link } from "react-router";
+
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -84,7 +85,11 @@ const Orders = () => {
           <tbody className="divide-y divide-gray-200">
             {orders.map((order) => (
               <tr key={order._id}>
-                <td className="px-6 py-4">{order.orderId}</td>
+                <td className="px-6 py-4">
+                  <Link to={`/track/${order._id}`} className="text-blue-800 hover:text-blue-500">
+                    {order.orderId}
+                  </Link>
+                </td>
                 <td className="px-6 py-4">{order.userId}</td>
                 <td className="px-6 py-4">₹{order.totalAmount}</td>
                 <td className="px-6 py-4">

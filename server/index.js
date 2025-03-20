@@ -327,10 +327,11 @@ app.get('/orders/:orderId', verifyToken, async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
-        if (order.userId.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ message: "Unauthorized" });
+       
+        if (req.user.userType === 'admin' || order.userId.toString() === req.user._id.toString()) {
+            return res.status(200).json({ order });
         }
-        res.status(200).json({ order });
+        return res.status(403).json({ message: "Unauthorized" });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
