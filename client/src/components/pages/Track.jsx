@@ -78,9 +78,9 @@ const Track = () => {
   );
 
   return (
-    <div className="max-w-4xl mx-auto p-6 font-poppins">
+    <div className="max-w-5xl mx-auto p-6 font-poppins my-20  bg-gray-800 rounded-xl">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold">Order #{order.orderId}</h1>
+        <h1 className="text-2xl font-bold text-white">Order #{order.orderId}</h1>
         <span className={`px-4 py-1 rounded-full text-sm font-medium capitalize
           ${order.status === 'delivered' ? 'bg-green-100 text-green-800' :
             order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
@@ -186,10 +186,10 @@ const Track = () => {
             {order.items.map((item, index) => (
               <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100">
                 <div>
-                  <p className="font-medium">{item.name}</p>
+                  <p className="font-medium text-gray-900">{item.name}</p>
                   <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                 </div>
-                <span className="font-medium">₹{item.price}</span>
+                <span className="font-medium">{item.price}</span>
               </div>
             ))}
             <div className="pt-3 border-t border-gray-200">
