@@ -35,6 +35,7 @@ const UserSchema = new mongoose.Schema({
     city: {type: String, default: null},
     address: {type: String, default: null},
     pincode: {type: String, default: null},
+    userType: {type: String, default: 'user'},
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 });
@@ -70,6 +71,23 @@ const verifyToken = async (req, res, next) => {
         if (error.name === 'TokenExpiredError') {
             return res.status(401).json({ message: "Token has expired" });
         }
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+// Middleware to verify admin status
+const verifyAdmin = async (req, res, next) => {
+    try {
+        if (!req.user) {
+            return res.status(401).json({ message: "User not authenticated" });
+        }
+
+        if (req.user.userType !== 'admin') {
+            return res.status(403).json({ message: "Access denied. Admin privileges required" });
+        }
+
+        next();
+    } catch (error) {
         res.status(500).json({ message: "Internal server error" });
     }
 };
@@ -313,6 +331,37 @@ app.get('/orders/:orderId', verifyToken, async (req, res) => {
             return res.status(403).json({ message: "Unauthorized" });
         }
         res.status(200).json({ order });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+app.get('/admin/orders', verifyToken, verifyAdmin, async (req, res) => {
+    try {
+        const orders = await Order.find();
+        res.status(200).json({ orders });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}); 
+
+app.patch('/admin/orders/:orderId', verifyToken, verifyAdmin, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const order = await Order.findByIdAndUpdate(req.params.orderId, { status }, { new: true });
+        res.status(200).json({ message: "Order status updated successfully", order });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+app.get('/admin/users', verifyToken, verifyAdmin, async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).json({ users });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });

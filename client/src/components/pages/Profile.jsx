@@ -53,6 +53,14 @@ const Profile = () => {
       }
 
       const data = await response.json();
+
+      
+      // Check admin status first
+      if (data.user.userType === 'admin') {
+        navigate('/admin');
+        return; 
+      }
+
       setUserData(data.user);
       setFormData({
         name: data.user.name,
@@ -85,7 +93,7 @@ const Profile = () => {
       }
 
       const data = await response.json(); 
-      console.log('Orders data:', data);
+
       
       // Check if data exists and has orders property
       if (data && Array.isArray(data)) {

@@ -11,6 +11,10 @@ import NotFound from "./components/pages/404";
 import Profile from "./components/pages/Profile";
 import Checkout from "./components/pages/Checkout";
 import Track from "./components/pages/Track";
+import Dashboard from './components/pages/Admin/Dashboard';
+import Products from './components/pages/Admin/Products';
+import Orders from './components/pages/Admin/Orders';
+
 function App() {
   return (
     <CartProvider>
@@ -24,6 +28,10 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/track/:orderId" element={<Track />} />
+          <Route path="/admin" element={<Dashboard />}>
+            <Route path="products" element={<Products />} />
+            <Route path="orders" element={<Orders />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
