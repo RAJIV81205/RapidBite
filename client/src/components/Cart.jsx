@@ -1,6 +1,7 @@
 import React from 'react';
 import { useCart } from './CartContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router';
 
 const Cart = () => {
   const {
@@ -115,14 +116,14 @@ const Cart = () => {
                     <span className="text-lg font-semibold">Total:</span>
                   <span className="text-lg font-semibold">₹{getCartTotal()}</span>
                 </div>
-                <div className='flex justify-between items-center gap-4'>
+                <div className='flex flex-col sm:flex-row justify-between items-center gap-4'>
                 <button
                   className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors font-poppins"
                   onClick={() => clearCart()}
                 >
                   Clear Cart
                 </button>
-                <Link to="/checkout">
+                <Link to="/checkout" className='w-full'>
                 <button
                   className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors font-poppins"
                 >
