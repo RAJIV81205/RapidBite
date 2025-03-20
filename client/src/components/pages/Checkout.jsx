@@ -25,7 +25,7 @@ const Checkout = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cityOptions, setCityOptions] = useState([]);
   const [pincodeError, setPincodeError] = useState('');
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -149,12 +149,12 @@ const Checkout = () => {
     e.preventDefault();
     
     try {
-      setIsProcessingPayment(true);
+      setIsSubmitting(true);
       const token = localStorage.getItem('token');
       const url = import.meta.env.VITE_BACKEND_URL;
 
-      // First create order in backend
-      const orderResponse = await fetch(`${url}/orders/create`, {
+      // Create order in backend
+      const orderResponse = await fetch(`${url}/create-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,8 +162,12 @@ const Checkout = () => {
         },
         body: JSON.stringify({
           items: cartItems,
-          total: Math.round(total * 100), // Convert to paise
-          deliveryDetails: formData,
+          totalAmount: total,
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          pincode: formData.pincode,
+          mobile: formData.phone,
         }),
       });
 
@@ -171,73 +175,14 @@ const Checkout = () => {
         throw new Error('Failed to create order');
       }
 
-      const orderData = await orderResponse.json();
-
-      // Load Razorpay SDK
-      const res = await loadRazorpay();
-      
-      if (!res) {
-        alert('Razorpay SDK failed to load');
-        return;
-      }
-
-      // Initialize Razorpay payment
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: Math.round(total * 100), // Convert to paise
-        currency: 'INR',
-        name: 'RapidBite',
-        description: 'Food Delivery Payment',
-        order_id: orderData.razorpayOrderId,
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          contact: formData.phone,
-        },
-        handler: async function (response) {
-          try {
-            // Verify payment with backend
-            const verifyResponse = await fetch(`${url}/orders/verify`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                orderId: orderData.orderId,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature,
-              }),
-            });
-
-            if (verifyResponse.ok) {
-              clearCart();
-              navigate('/profile');
-            } else {
-              alert('Payment verification failed');
-            }
-          } catch (error) {
-            console.error('Payment verification error:', error);
-            alert('Payment verification failed');
-          }
-        },
-        modal: {
-          ondismiss: function() {
-            setIsProcessingPayment(false);
-          }
-        },
-        theme: {
-          color: '#16a34a'
-        }
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
+      // Clear cart and redirect to profile
+      clearCart();
+      navigate('/profile');
     } catch (error) {
-      console.error('Error processing payment:', error);
-      alert('Failed to process payment');
-      setIsProcessingPayment(false);
+      console.error('Error creating order:', error);
+      alert('Failed to create order. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -515,17 +460,17 @@ const Checkout = () => {
 
                 <button
                   type="submit"
-                  disabled={isProcessingPayment}
+                  disabled={isSubmitting}
                   className={`w-full py-4 rounded-lg font-semibold mt-6 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all ${
-                    isProcessingPayment 
+                    isSubmitting 
                       ? 'bg-gray-400 cursor-not-allowed' 
                       : 'bg-green-600 hover:bg-green-700 text-white'
                   }`}
                 >
-                  {isProcessingPayment ? (
+                  {isSubmitting ? (
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
-                      Processing Payment...
+                      Creating Order...
                     </div>
                   ) : (
                     'Place Order'

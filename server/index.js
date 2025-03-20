@@ -244,6 +244,69 @@ app.post("/github-login", async (req, res) => {
     }
 });
 
+const orderSchema = new mongoose.Schema({
+    orderId: { type: String, unique: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    items: [{
+        name: String,
+        quantity: Number,
+        price: String,
+        _id: false
+    }],
+    address: { type: String, required: true },
+    city: { type: String, required: true },
+    state: { type: String, required: true },
+    pincode: { type: String, required: true },
+    mobile: { type: Number, required: true },
+    totalAmount: { type: Number, required: true },
+    status: { type: String, default: 'pending' },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+
+const Order = mongoose.model('Order', orderSchema);
+
+app.post('/create-order', verifyToken, async (req, res) => {
+    try {
+        const { items, totalAmount, address, city, state, pincode, mobile } = req.body;
+        
+        const orderId = generateOrderId();  
+
+        const newOrder = new Order({
+            orderId,
+            userId: req.user._id,
+            items,
+            totalAmount,
+            address,
+            city,
+            state,
+            pincode,
+            mobile,
+        });
+
+        await newOrder.save();
+
+        res.status(201).json({ message: "Order created successfully", orderId , newOrder });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}); 
+
+app.get('/orders', verifyToken, async (req, res) => {
+    try {
+        const orders = await Order.find({ userId: req.user._id });
+        res.status(200).json(orders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+const generateOrderId = () => {
+    return Math.random() * 10000000;
+};  
+
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);
 });

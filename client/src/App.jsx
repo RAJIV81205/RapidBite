@@ -10,6 +10,7 @@ import Auth from "./components/pages/Auth";
 import NotFound from "./components/pages/404";
 import Profile from "./components/pages/Profile";
 import Checkout from "./components/pages/Checkout";
+import Track from "./components/pages/Track";
 function App() {
   return (
     <CartProvider>
@@ -22,6 +23,7 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/track/:orderId" element={<Track />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
