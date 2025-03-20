@@ -19,6 +19,7 @@ const Profile = () => {
     pincode: '',
     createdAt: '',
   });
+  const [orders, setOrders] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,6 +33,7 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserData();
+    fetchOrders();
   }, []);
 
   const url = import.meta.env.VITE_BACKEND_URL;
@@ -64,6 +66,40 @@ const Profile = () => {
       });
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${url}/orders`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch orders');
+      }
+
+      const data = await response.json(); 
+      console.log('Orders data:', data);
+      
+      // Check if data exists and has orders property
+      if (data && Array.isArray(data)) {
+        setOrders(data);
+      } else if (data && Array.isArray(data.orders)) {
+        setOrders(data.orders);
+      } else {
+        setOrders([]);
+        console.error('Invalid orders data structure:', data);
+      }
+    } catch (err) {
+      console.error('Error fetching orders:', err);
+      setError(err.message);
+      setOrders([]);
     } finally {
       setIsLoading(false);
     }
@@ -301,7 +337,40 @@ const Profile = () => {
           <div className="p-6">
             <h2 className="text-2xl font-bold mb-4">My Orders</h2>
             <div className="bg-white rounded-lg shadow p-6">
-              <p className="text-gray-500">No orders found</p>
+              {isLoading ? (
+                <div className="flex justify-center items-center h-32">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                </div>
+              ) : error ? (
+                <div className="text-red-600 text-center py-4">{error}</div>
+              ) : orders.length === 0 ? (
+                <div className="text-gray-500 text-center py-4">No orders found</div>
+              ) : (
+                orders.map((order) => (
+                  <div key={order._id || order.id} className="border-b py-4 last:border-b-0">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="font-medium">Order #{order.orderId || order._id}</p>
+                        <p className="text-sm text-gray-500">
+                          {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Date not available'}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium">
+                          ${(order.total || 0).toFixed(2)}
+                        </p>
+                        <p className={`text-sm ${
+                          order.status === 'delivered' ? 'text-green-500' :
+                          order.status === 'pending' ? 'text-yellow-500' :
+                          'text-blue-500'
+                        }`}>
+                          {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Unknown Status'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         );

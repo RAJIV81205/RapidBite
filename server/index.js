@@ -296,7 +296,7 @@ app.post('/create-order', verifyToken, async (req, res) => {
 app.get('/orders', verifyToken, async (req, res) => {
     try {
         const orders = await Order.find({ userId: req.user._id });
-        res.status(200).json(orders);
+        res.status(200).json({ orders });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
@@ -304,7 +304,7 @@ app.get('/orders', verifyToken, async (req, res) => {
 });
 
 const generateOrderId = () => {
-    return Math.random() * 10000000;
+    return Math.floor(Math.random() * 10000000);
 };  
 
 app.listen(process.env.PORT, () => {
