@@ -126,6 +126,7 @@ const Cart = () => {
                 <Link to="/checkout" className='w-full'>
                 <button
                   className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors font-poppins"
+                  onClick={toggleCart}
                 >
                   Proceed to Checkout
                   </button>
