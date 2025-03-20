@@ -14,6 +14,11 @@ const Cart = () => {
 
   if (!isCartOpen) return null;
 
+  const clearCart = () => {
+    localStorage.removeItem('cart');
+    window.location.reload();
+  };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -105,16 +110,26 @@ const Cart = () => {
 
             {/* Cart Footer */}
             {cartItems.length > 0 && (
-              <div className="border-t p-4 sm:p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-lg font-semibold">Total:</span>
+                <div className="border-t p-4 sm:p-6">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-lg font-semibold">Total:</span>
                   <span className="text-lg font-semibold">₹{getCartTotal()}</span>
                 </div>
+                <div className='flex justify-between items-center gap-4'>
                 <button
-                  className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                  className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors font-poppins"
+                  onClick={() => clearCart()}
+                >
+                  Clear Cart
+                </button>
+                <Link to="/checkout">
+                <button
+                  className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors font-poppins"
                 >
                   Proceed to Checkout
-                </button>
+                  </button>
+                  </Link>
+                </div>
               </div>
             )}
           </div>
