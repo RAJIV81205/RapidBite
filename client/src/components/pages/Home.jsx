@@ -8,7 +8,6 @@ import {
   allCategories,
   trendingItems,
   features,
-  categoryProducts,
 } from "../constants";
 import {
   BannerSkeleton,
@@ -17,17 +16,53 @@ import {
   PromotionalBannerSkeleton,
   ProductCardSkeleton,
 } from "../Skeletons";
+import { Contrast } from "lucide-react";
 
 const Home = () => {
   const { addToCart } = useCart();
   const [isLoading, setIsLoading] = useState(true);
+  const [products, setProducts] = useState({});
+  const [error, setError] = useState(null);
+  const url = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${url}/products`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await response.json();
+        const products = data.products;
+        
+        const groupedProducts = products.reduce((acc, product) => {
+          const categoryName = product.category;
+          if (!acc[categoryName]) {
+            acc[categoryName] = [];
+          }
+          acc[categoryName].push({
+            id: product._id,
+            name: product.name,
+            price: `₹${product.discountPrice}`,
+            originalPrice: `₹${product.originalPrice}`,
+            discount: `${product.discount}% off`,
+            quantity: product.quantity,
+            image: product.image,
+            inStock: product.inStock
+          });
+          return acc;
+        }, {});
+        
+        setProducts(groupedProducts);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching products:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    fetchProducts();
   }, []);
 
   if (isLoading) {
@@ -316,7 +351,7 @@ const Home = () => {
 
         {/* Categories with Products */}
         {allCategories.map((category) => (
-          <div key={category.id} className="mb-12">
+          <div key={category.name} className="mb-12">
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{category.icon}</span>
@@ -325,16 +360,16 @@ const Home = () => {
                 </h2>
               </div>
               <Link
-                to={`/items/${category.id}`}
+                to={`/items/${category.name}`}
                 className="text-green-600 text-sm font-semibold hover:text-green-700 font-poppins"
               >
                 View All →
               </Link>
             </div>
 
-            {categoryProducts[category.id] ? (
+            {products[category.name] ? (
               <div className="flex overflow-x-auto gap-4 pb-4 -mx-4 px-4 scrollbar-hide">
-                {categoryProducts[category.id].map((product) => (
+                {products[category.name].map((product) => (
                   <motion.div
                     key={product.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -351,9 +386,11 @@ const Home = () => {
                         alt={product.name}
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-medium">
-                        {product.discount}
-                      </div>
+                      {product.discount !== '0% off' && (
+                        <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-medium">
+                          {product.discount}
+                        </div>
+                      )}
                     </div>
                     <div className="p-3">
                       <h3 className="font-medium text-gray-800 text-sm truncate font-poppins">
@@ -367,9 +404,11 @@ const Home = () => {
                           <span className="text-green-600 font-bold text-sm font-poppins">
                             {product.price}
                           </span>
-                          <span className="text-xs text-gray-500 line-through font-poppins">
-                            {product.originalPrice}
-                          </span>
+                          {product.originalPrice !== product.price && (
+                            <span className="text-xs text-gray-500 line-through font-poppins">
+                              {product.originalPrice}
+                            </span>
+                          )}
                         </div>
                         <button
                           onClick={() => addToCart(product)}

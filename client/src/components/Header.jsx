@@ -23,8 +23,6 @@ const Header = () => {
     try {
       setIsLoading(true);
       
-      // Add a minimum loading time of 1.5 seconds
-      await new Promise(resolve => setTimeout(resolve, 1500));
 
       if (!token) {
         setIsLoggedIn(false);
