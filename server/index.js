@@ -121,7 +121,8 @@ app.post("/login", async (req, res) => {
             return res.status(400).json({ message: "Invalid password" });
         }
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ message: "Login successful", token });
+        const { password: _, ...userWithoutPassword } = user.toObject(); // Exclude password
+        res.status(200).json({ message: "Login successful", token, user: userWithoutPassword });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });

@@ -40,14 +40,25 @@ const Auth = () => {
                 const data = await response.json();
                 if(data.token){
                     localStorage.setItem('token', data.token);
-                    await Swal.fire({
-                        icon: 'success',
-                        title: 'Welcome back!',
-                        text: data.message || 'Successfully logged in!',
-                        timer: 2000,
-                        showConfirmButton: false,
-                    });
-                    navigate('/', { replace: true });
+                    if (data.user && data.user.userType === 'admin') {
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Welcome Admin!',
+                            text: data.message || 'Successfully logged in as admin!',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                        navigate('/admin-dashboard', { replace: true });
+                    } else {
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Welcome back!',
+                            text: data.message || 'Successfully logged in!',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                        navigate('/', { replace: true });
+                    }
                 }
                 else{
                     await Swal.fire({

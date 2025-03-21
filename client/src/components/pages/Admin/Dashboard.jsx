@@ -1,8 +1,56 @@
-import React from 'react';
-import { Link, Outlet } from 'react-router';
+import React, { useEffect } from 'react';
+import { Link, Outlet, useNavigate } from 'react-router';
 import { Package, ShoppingBag, Settings, LogOut } from 'lucide-react';
+import Swal from 'sweetalert2';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const authenticateAdmin = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Unauthorized',
+          text: 'You must be logged in as an admin to access this page.',
+        });
+        navigate('/auth', { replace: true });
+        return;
+      }
+
+      try {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/verify-token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+
+        if (!response.ok || data.user.userType !== 'admin') {
+          await Swal.fire({
+            icon: 'error',
+            title: 'Access Denied',
+            text: 'You do not have admin privileges.',
+          });
+          navigate('/auth', { replace: true });
+        }
+      } catch (error) {
+        console.error('Authentication error:', error);
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to authenticate. Please try again.',
+        });
+        navigate('/auth', { replace: true });
+      }
+    };
+
+    authenticateAdmin();
+  }, [navigate]);
+
   return (
     <div className="flex min-h-screen bg-gray-100 mt-15">
       {/* Sidebar */}
@@ -27,7 +75,10 @@ const Dashboard = () => {
             Settings
           </Link>
           <button 
-            onClick={() => {/* Add logout logic */}} 
+            onClick={() => {
+              localStorage.removeItem('token');
+              navigate('/auth', { replace: true });
+            }} 
             className="flex items-center p-3 mb-2 rounded hover:bg-gray-100 w-full text-red-500">
             <LogOut className="w-5 h-5 mr-3" />
             Logout
@@ -43,4 +94,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;
