@@ -52,43 +52,52 @@ const Dashboard = () => {
   }, [navigate]);
 
   return (
-    <div className="flex min-h-screen bg-gray-100 mt-15">
+    <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-md">
-        <div className="p-4 border-b">
-          <h2 className="text-xl font-bold">Admin Panel</h2>
+      <div className="w-64 bg-white shadow-lg">
+        <div className="p-6 border-b bg-gradient-to-r from-green-500 to-green-600 text-white">
+          <h2 className="text-2xl font-bold">Admin Panel</h2>
         </div>
-        <nav className="p-4">
-          <Link to="/admin/products" 
-            className="flex items-center p-3 mb-2 rounded hover:bg-gray-100">
-            <Package className="w-5 h-5 mr-3" />
-            Products
+        <nav className="p-4 space-y-2">
+          <Link
+            to="/admin/products"
+            className="flex items-center p-3 rounded-lg hover:bg-green-100 transition-all duration-200"
+          >
+            <Package className="w-5 h-5 mr-3 text-green-500" />
+            <span className="font-medium text-gray-700">Products</span>
           </Link>
-          <Link to="/admin/orders" 
-            className="flex items-center p-3 mb-2 rounded hover:bg-gray-100">
-            <ShoppingBag className="w-5 h-5 mr-3" />
-            Orders
+          <Link
+            to="/admin/orders"
+            className="flex items-center p-3 rounded-lg hover:bg-green-100 transition-all duration-200"
+          >
+            <ShoppingBag className="w-5 h-5 mr-3 text-green-500" />
+            <span className="font-medium text-gray-700">Orders</span>
           </Link>
-          <Link to="/admin/settings" 
-            className="flex items-center p-3 mb-2 rounded hover:bg-gray-100">
-            <Settings className="w-5 h-5 mr-3" />
-            Settings
+          <Link
+            to="/admin/settings"
+            className="flex items-center p-3 rounded-lg hover:bg-green-100 transition-all duration-200"
+          >
+            <Settings className="w-5 h-5 mr-3 text-green-500" />
+            <span className="font-medium text-gray-700">Settings</span>
           </Link>
-          <button 
+          <button
             onClick={() => {
               localStorage.removeItem('token');
               navigate('/auth', { replace: true });
-            }} 
-            className="flex items-center p-3 mb-2 rounded hover:bg-gray-100 w-full text-red-500">
+            }}
+            className="flex items-center p-3 rounded-lg hover:bg-red-100 transition-all duration-200 w-full text-red-500"
+          >
             <LogOut className="w-5 h-5 mr-3" />
-            Logout
+            <span className="font-medium">Logout</span>
           </button>
         </nav>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
-        <Outlet />
+      <div className="flex-1 p-8 bg-gray-100">
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

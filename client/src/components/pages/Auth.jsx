@@ -48,7 +48,7 @@ const Auth = () => {
                             timer: 2000,
                             showConfirmButton: false,
                         });
-                        navigate('/admin-dashboard', { replace: true });
+                        navigate('/admin', { replace: true });
                     } else {
                         await Swal.fire({
                             icon: 'success',
