@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-';
+import { Link, Outlet, useNavigate } from 'react-router';
 import { Package, ShoppingBag, Settings, LogOut, Menu, X, ChevronDown } from 'lucide-react';
 import Swal from 'sweetalert2';
 
