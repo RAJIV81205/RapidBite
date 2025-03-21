@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useCart } from "./CartContext";
 import { Link, useLocation } from "react-router";
+import { HeaderSkeleton } from "./Skeletons";
 
 
 const Header = () => {
@@ -21,6 +22,10 @@ const Header = () => {
   const verifyToken = async () => {
     try {
       setIsLoading(true);
+      
+      // Add a minimum loading time of 1.5 seconds
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
       if (!token) {
         setIsLoggedIn(false);
         setUser(null);
@@ -110,6 +115,10 @@ const Header = () => {
       },
     },
   };
+
+  if (isLoading) {
+    return <HeaderSkeleton />;
+  }
 
   return (
     <motion.header

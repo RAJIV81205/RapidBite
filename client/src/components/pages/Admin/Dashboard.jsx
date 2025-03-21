@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router';
 import { Package, ShoppingBag, Settings, LogOut, Menu, X, ChevronDown } from 'lucide-react';
 import Swal from 'sweetalert2';
+import { TableRowSkeleton } from "../../Skeletons";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const authenticateAdmin = async () => {
@@ -51,6 +53,13 @@ const Dashboard = () => {
     };
 
     authenticateAdmin();
+
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   const toggleSidebar = () => {
@@ -82,6 +91,74 @@ const Dashboard = () => {
       <span className="font-medium text-gray-700">{children}</span>
     </Link>
   );
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-[95%] sm:max-w-[80%] mx-auto py-4 sm:py-6">
+          {/* Stats Grid Skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {[1, 2, 3, 4].map((index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow-md animate-pulse">
+                <div className="h-8 bg-gray-200 rounded w-32 mb-4" />
+                <div className="h-6 bg-gray-200 rounded w-24" />
+              </div>
+            ))}
+          </div>
+
+          {/* Recent Orders Table Skeleton */}
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="p-6 border-b">
+              <div className="h-6 bg-gray-200 rounded w-48 animate-pulse" />
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="px-6 py-4 text-left">
+                      <div className="h-4 bg-gray-200 rounded w-24 animate-pulse" />
+                    </th>
+                    <th className="px-6 py-4 text-left">
+                      <div className="h-4 bg-gray-200 rounded w-24 animate-pulse" />
+                    </th>
+                    <th className="px-6 py-4 text-left">
+                      <div className="h-4 bg-gray-200 rounded w-24 animate-pulse" />
+                    </th>
+                    <th className="px-6 py-4 text-left">
+                      <div className="h-4 bg-gray-200 rounded w-24 animate-pulse" />
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[1, 2, 3, 4, 5].map((index) => (
+                    <TableRowSkeleton key={index} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Recent Products Skeleton */}
+          <div className="mt-8 bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="p-6 border-b">
+              <div className="h-6 bg-gray-200 rounded w-48 animate-pulse" />
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {[1, 2, 3, 4, 5].map((index) => (
+                  <div key={index} className="bg-gray-50 rounded-lg p-4 animate-pulse">
+                    <div className="h-32 bg-gray-200 rounded mb-4" />
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                    <div className="h-4 bg-gray-200 rounded w-1/2" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, ShoppingBag, LogOut, Settings, Heart, Save, X } from 'lucide-react';
 import { useNavigate, Link } from 'react-router';
+import { ProfileSectionSkeleton, OrderCardSkeleton } from "../Skeletons";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -34,6 +35,13 @@ const Profile = () => {
   useEffect(() => {
     fetchUserData();
     fetchOrders();
+
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const url = import.meta.env.VITE_BACKEND_URL;
@@ -420,6 +428,46 @@ const Profile = () => {
         return null;
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-transparent mt-15">
+        <div className="max-w-[95%] sm:max-w-[80%] mx-auto py-4 sm:py-6">
+          {/* Profile Section Skeleton */}
+          <div className="mb-8">
+            <ProfileSectionSkeleton />
+          </div>
+
+          {/* Recent Orders Section Skeleton */}
+          <div>
+            <div className="h-8 bg-gray-200 rounded w-48 animate-pulse mb-6" />
+            <div className="space-y-4">
+              {[1, 2, 3].map((index) => (
+                <OrderCardSkeleton key={index} />
+              ))}
+            </div>
+          </div>
+
+          {/* Address Section Skeleton */}
+          <div className="mt-8">
+            <div className="h-8 bg-gray-200 rounded w-48 animate-pulse mb-6" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[1, 2].map((index) => (
+                <div key={index} className="bg-white rounded-xl p-6 shadow-md animate-pulse">
+                  <div className="h-5 bg-gray-200 rounded w-32 mb-4" />
+                  <div className="space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-3/4" />
+                    <div className="h-4 bg-gray-200 rounded w-1/2" />
+                    <div className="h-4 bg-gray-200 rounded w-2/3" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100 pt-15">

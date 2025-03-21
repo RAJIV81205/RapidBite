@@ -1,13 +1,53 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "react-router";
 import { useCart } from "../CartContext";
 import Cart from "../Cart";
 import { categoryProducts, allCategories } from "../constants";
+import { ProductCardSkeleton } from "../Skeletons";
 
 const Items = () => {
   const { categoryId } = useParams();
   const { addToCart } = useCart();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-transparent mt-15">
+        <div className="max-w-[95%] sm:max-w-[80%] mx-auto py-4 sm:py-6">
+          {/* Category Header Skeleton */}
+          <div className="mb-8">
+            <div className="h-8 bg-gray-200 rounded w-48 animate-pulse mb-4" />
+            <div className="h-4 bg-gray-200 rounded w-64 animate-pulse" />
+          </div>
+
+          {/* Filters Skeleton */}
+          <div className="flex flex-wrap gap-4 mb-8">
+            <div className="h-10 bg-gray-200 rounded w-32 animate-pulse" />
+            <div className="h-10 bg-gray-200 rounded w-32 animate-pulse" />
+            <div className="h-10 bg-gray-200 rounded w-32 animate-pulse" />
+          </div>
+
+          {/* Products Grid Skeleton */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => (
+              <ProductCardSkeleton key={index} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const products = categoryProducts[categoryId] || [];
   const category = allCategories.find(cat => cat.id.toString() === categoryId);
 

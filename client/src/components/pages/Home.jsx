@@ -1,12 +1,98 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useCart } from "../CartContext";
 import { Link } from "react-router";
 import Cart from "../Cart";
 import { promotionalBanners, allCategories, trendingItems, features, categoryProducts } from "../constants";
+import {
+  BannerSkeleton,
+  FeatureCardSkeleton,
+  CategoryCardSkeleton,
+  PromotionalBannerSkeleton,
+  ProductCardSkeleton
+} from "../Skeletons";
 
 const Home = () => {
   const { addToCart } = useCart();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-transparent mt-15 overflow-hidden">
+        <div className="max-w-[95%] sm:max-w-[80%] mx-auto py-4 sm:py-6">
+          {/* Main Banner Skeleton */}
+          <BannerSkeleton />
+
+          {/* Features Skeleton */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 my-6 sm:my-8">
+            {[1, 2, 3, 4].map((index) => (
+              <FeatureCardSkeleton key={index} />
+            ))}
+          </div>
+
+          {/* Categories Grid Skeleton */}
+          <div className="my-8 sm:my-12">
+            <div className="flex justify-between items-center mb-6 sm:mb-8">
+              <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
+              <div className="h-6 bg-gray-200 rounded w-32 animate-pulse" />
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+              {[1, 2, 3, 4, 5, 6].map((index) => (
+                <CategoryCardSkeleton key={index} />
+              ))}
+            </div>
+          </div>
+
+          {/* Promotional Banners Skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 my-8 sm:my-12">
+            {[1, 2, 3].map((index) => (
+              <PromotionalBannerSkeleton key={index} />
+            ))}
+          </div>
+
+          {/* Trending Items Skeleton */}
+          <div className="mb-12 sm:mb-16">
+            <div className="flex justify-between items-center mb-6 sm:mb-8">
+              <div className="h-8 bg-gray-200 rounded w-32 animate-pulse" />
+              <div className="h-6 bg-gray-200 rounded w-24 animate-pulse" />
+            </div>
+            <div className="flex overflow-x-auto gap-3 sm:gap-4 pb-4 -mx-4 px-4 scrollbar-hide">
+              {[1, 2, 3, 4, 5].map((index) => (
+                <ProductCardSkeleton key={index} />
+              ))}
+            </div>
+          </div>
+
+          {/* Categories with Products Skeleton */}
+          {[1, 2, 3].map((categoryIndex) => (
+            <div key={categoryIndex} className="mb-12">
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-6 bg-gray-200 rounded w-32 animate-pulse" />
+                </div>
+                <div className="h-6 bg-gray-200 rounded w-20 animate-pulse" />
+              </div>
+              <div className="flex overflow-x-auto gap-4 pb-4 -mx-4 px-4 scrollbar-hide">
+                {[1, 2, 3, 4].map((productIndex) => (
+                  <ProductCardSkeleton key={productIndex} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-transparent mt-15 overflow-hidden">
