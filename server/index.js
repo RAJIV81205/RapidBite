@@ -276,7 +276,7 @@ const orderSchema = new mongoose.Schema({
     city: { type: String, required: true },
     state: { type: String, required: true },
     pincode: { type: String, required: true },
-    mobile: { type: Number, required: true },
+    mobile: { type: Number, required: true }, 
     totalAmount: { type: Number, required: true },
     status: { type: String, default: 'pending' },
     createdAt: { type: Date, default: Date.now },
@@ -300,12 +300,12 @@ app.post('/create-order', verifyToken, async (req, res) => {
             city,
             state,
             pincode,
-            mobile,
+            mobile: parseFloat(parseFloat(mobile).toFixed(2)), // Ensure up to 2 decimal places
         });
 
         await newOrder.save();
 
-        res.status(201).json({ message: "Order created successfully", orderId , newOrder });
+        res.status(201).json({ message: "Order created successfully", orderId, newOrder });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
@@ -357,6 +357,36 @@ app.patch('/admin/orders/:orderId', verifyToken, verifyAdmin, async (req, res) =
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+app.post('/admin/orders/:orderId/cancel', verifyToken, async (req, res) => {
+    try {
+        const { orderId } = req.params;
+
+        // Ensure the user is an admin
+        if (req.user.userType !== 'admin') {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+
+        const order = await Order.findOne({ _id: orderId });
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        if (order.status === 'canceled') {
+            return res.status(400).json({ message: 'Order is already canceled' });
+        }
+
+        order.status = 'canceled';
+        order.updatedAt = Date.now();
+        await order.save();
+
+        res.status(200).json({ message: 'Order canceled successfully', order });
+    } catch (error) {
+        console.error('Error canceling order:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 

@@ -57,6 +57,47 @@ const Orders = () => {
     }
   };
 
+  const cancelOrder = async (orderId) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/admin/orders/${orderId}/cancel`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) { 
+        console.error("Error canceling order:", data.message);
+        return;
+      }
+      if (response.ok) {
+        fetchOrders();
+      }
+    } catch (error) {
+      console.error("Error canceling order:", error);
+    }
+  };
+
+  const getStatusBgColor = (status) => {
+    switch (status) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "confirmed":
+        return "bg-blue-100 text-blue-800";
+      case "shipped":
+        return "bg-purple-100 text-purple-800";
+      case "delivered":
+        return "bg-green-100 text-green-800";
+      case "canceled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Orders Management</h1>
@@ -80,35 +121,69 @@ const Orders = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Date
               </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {orders.map((order) => (
-              <tr key={order._id}>
+              <tr
+                key={order._id}
+                className={order.status === "canceled" ? "bg-red-50" : ""}
+              >
                 <td className="px-6 py-4">
-                  <Link to={`/track/${order._id}`} className="text-blue-800 hover:text-blue-500">
+                  <Link
+                    to={`/track/${order._id}`}
+                    className={`${
+                      order.status === "canceled"
+                        ? "text-red-500"
+                        : "text-blue-800 hover:text-blue-500"
+                    }`}
+                  >
                     {order.orderId}
                   </Link>
                 </td>
                 <td className="px-6 py-4">{order.userId}</td>
                 <td className="px-6 py-4">₹{order.totalAmount}</td>
                 <td className="px-6 py-4">
-                  <select
-                    value={order.status}
-                    onChange={(e) =>
-                      updateOrderStatus(order._id, e.target.value)
-                    }
-                    className="border rounded p-1"
+                  <span
+                    className={`px-2 py-1 rounded text-sm font-medium ${getStatusBgColor(
+                      order.status
+                    )}`}
                   >
-                    {statuses.map((status) => (
-                      <option key={status.id} value={status.id}>
-                        {status.label}
-                      </option>
-                    ))}
-                  </select>
+                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                  </span>
                 </td>
                 <td className="px-6 py-4">
                   {new Date(order.createdAt).toLocaleDateString()}
+                </td>
+                <td className="px-6 py-4">
+                  {order.status !== "canceled" ? (
+                    <>
+                      <select
+                        value={order.status}
+                        onChange={(e) =>
+                          updateOrderStatus(order._id, e.target.value)
+                        }
+                        className="border rounded p-1 mb-2"
+                      >
+                        {statuses.map((status) => (
+                          <option key={status.id} value={status.id}>
+                            {status.label}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={() => cancelOrder(order._id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Cancel Order
+                      </button>
+                    </>
+                  ) : (
+                    <span className="text-gray-500 italic">No actions available</span>
+                  )}
                 </td>
               </tr>
             ))}
