@@ -3,13 +3,19 @@ import { motion } from "framer-motion";
 import { useCart } from "../CartContext";
 import { Link } from "react-router";
 import Cart from "../Cart";
-import { promotionalBanners, allCategories, trendingItems, features, categoryProducts } from "../constants";
+import {
+  promotionalBanners,
+  allCategories,
+  trendingItems,
+  features,
+  categoryProducts,
+} from "../constants";
 import {
   BannerSkeleton,
   FeatureCardSkeleton,
   CategoryCardSkeleton,
   PromotionalBannerSkeleton,
-  ProductCardSkeleton
+  ProductCardSkeleton,
 } from "../Skeletons";
 
 const Home = () => {
@@ -17,7 +23,6 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading time
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
@@ -152,9 +157,15 @@ const Home = () => {
               transition={{ delay: index * 0.1 }}
               className="bg-white rounded-xl p-4 sm:p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] text-center"
             >
-              <div className="text-3xl sm:text-4xl mb-2 sm:mb-3">{feature.icon}</div>
-              <h3 className="font-semibold text-gray-800 text-sm sm:text-base font-poppins">{feature.title}</h3>
-              <p className="text-xs sm:text-sm text-gray-600 font-poppins">{feature.description}</p>
+              <div className="text-3xl sm:text-4xl mb-2 sm:mb-3">
+                {feature.icon}
+              </div>
+              <h3 className="font-semibold text-gray-800 text-sm sm:text-base font-poppins">
+                {feature.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-600 font-poppins">
+                {feature.description}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -172,30 +183,34 @@ const Home = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
             {allCategories.map((category) => (
               <Link to={`/items/${category.id}`}>
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                whileHover={{
-                  y: -5,
-                  shadow: "0 12px 30px rgba(0, 0, 0, 0.12)",
-                }}
-                className="bg-white rounded-xl overflow-hidden shadow-[0_3px_15px_rgba(0,0,0,0.07)] cursor-pointer border-2 border-gray-200"
-              >
-                <div className="relative h-24 sm:h-32">
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/20" />
-                </div>
-                <div className="p-3 sm:p-4 text-center">
-                  <span className="text-xl sm:text-2xl mb-1 sm:mb-2 block">{category.icon}</span>
-                  <h3 className="font-medium text-gray-800 text-sm sm:text-base font-poppins">{category.name}</h3>
-                </div>
-              </motion.div>
+                <motion.div
+                  key={category.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  whileHover={{
+                    y: -5,
+                    shadow: "0 12px 30px rgba(0, 0, 0, 0.12)",
+                  }}
+                  className="bg-white rounded-xl overflow-hidden shadow-[0_3px_15px_rgba(0,0,0,0.07)] cursor-pointer border-2 border-gray-200"
+                >
+                  <div className="relative h-24 sm:h-32">
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/20" />
+                  </div>
+                  <div className="p-3 sm:p-4 text-center">
+                    <span className="text-xl sm:text-2xl mb-1 sm:mb-2 block">
+                      {category.icon}
+                    </span>
+                    <h3 className="font-medium text-gray-800 text-sm sm:text-base font-poppins">
+                      {category.name}
+                    </h3>
+                  </div>
+                </motion.div>
               </Link>
             ))}
           </div>
@@ -240,7 +255,9 @@ const Home = () => {
         {/* Trending Items */}
         <div className="mb-12 sm:mb-16">
           <div className="flex justify-between items-center mb-6 sm:mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Best Deals</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
+              Best Deals
+            </h2>
             <button className="text-green-600 text-sm sm:text-base font-semibold hover:text-green-700 font-poppins">
               View All Deals →
             </button>
@@ -272,7 +289,9 @@ const Home = () => {
                   <h3 className="font-medium text-gray-800 text-xs sm:text-sm truncate font-poppins">
                     {item.name}
                   </h3>
-                  <p className="text-[10px] sm:text-xs text-gray-600 mb-1 sm:mb-2 font-poppins">{item.quantity}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-600 mb-1 sm:mb-2 font-poppins">
+                    {item.quantity}
+                  </p>
                   <div className="flex justify-between items-center">
                     <div className="flex flex-col">
                       <span className="text-green-600 font-bold text-xs sm:text-sm font-poppins">
@@ -305,7 +324,7 @@ const Home = () => {
                   {category.name}
                 </h2>
               </div>
-              <Link 
+              <Link
                 to={`/items/${category.id}`}
                 className="text-green-600 text-sm font-semibold hover:text-green-700 font-poppins"
               >
@@ -379,21 +398,27 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="text-5xl mb-4">🌟</div>
-              <h3 className="text-xl font-semibold mb-2 font-poppins">Quality Assured</h3>
+              <h3 className="text-xl font-semibold mb-2 font-poppins">
+                Quality Assured
+              </h3>
               <p className="text-gray-600 font-poppins">
                 All products are carefully selected and quality checked
               </p>
             </div>
             <div className="text-center">
               <div className="text-5xl mb-4">⚡</div>
-              <h3 className="text-xl font-semibold mb-2 font-poppins">Express Delivery</h3>
+              <h3 className="text-xl font-semibold mb-2 font-poppins">
+                Express Delivery
+              </h3>
               <p className="text-gray-600 font-poppins">
                 Get your groceries delivered within 30 minutes
               </p>
             </div>
             <div className="text-center">
               <div className="text-5xl mb-4">💰</div>
-              <h3 className="text-xl font-semibold mb-2 font-poppins">Best Prices</h3>
+              <h3 className="text-xl font-semibold mb-2 font-poppins">
+                Best Prices
+              </h3>
               <p className="text-gray-600 font-poppins">
                 We offer competitive prices and regular discounts
               </p>

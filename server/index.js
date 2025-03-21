@@ -4,7 +4,7 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-
+import productRoutes from './routes/productRoutes.js';
 const app = express();
 
 dotenv.config();
@@ -23,6 +23,7 @@ connectDB();
 // Routes
 app.use('/api', userRoutes);
 app.use('/api', orderRoutes);
+app.use('/api', productRoutes);
 
 // Start server
 app.listen(process.env.PORT, () => {
