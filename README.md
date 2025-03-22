@@ -109,18 +109,65 @@ PORT=5000
 - Profile management
 - Order history
 - Wishlist management
+- Real-time order tracking
+- Address management
+- Payment method management
+- Order cancellation
+- Product reviews and ratings
+
+### Admin Features
+- Dashboard with sales analytics
+- Product management (CRUD operations)
+- Category management
+- Order management and status updates
+- User management
+- Inventory tracking
+- Promotional campaign management
+- Delivery partner management
+- Sales reports generation
+- Customer feedback management
+- System settings configuration
 
 ### Product Features
 - Category-based browsing
 - Search functionality
 - Product filtering and sorting
 - Real-time inventory updates
+- Product recommendations
+- Price history tracking
+- Bulk product import/export
+- Product variants management
+- Stock alerts
+- Product analytics
 
 ### Cart Features
 - Add/remove items
 - Quantity adjustment
 - Price calculation
 - Checkout process
+- Save cart for later
+- Share cart functionality
+- Bulk item addition
+- Cart recovery
+- Price comparison
+- Discount code application
+
+## 📸 Screenshots
+
+### User Interface
+![Home Page](screenshots/home.png)
+![Product Listing](screenshots/products.png)
+![Shopping Cart](screenshots/cart.png)
+![Checkout Process](screenshots/checkout.png)
+![Order Tracking](screenshots/tracking.png)
+![User Profile](screenshots/profile.png)
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/admin-dashboard.png)
+![Product Management](screenshots/product-management.png)
+![Order Management](screenshots/order-management.png)
+![Analytics](screenshots/analytics.png)
+![User Management](screenshots/user-management.png)
 
 ## 🤝 Contributing
 
