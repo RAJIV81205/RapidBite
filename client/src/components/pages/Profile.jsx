@@ -180,23 +180,23 @@ const Profile = () => {
     switch (activeTab) {
       case 'info':
         return (
-          <div className="p-6">
+          <div className="p-4 lg:p-6">
             <div className="max-w-4xl mx-auto">
               <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                 {/* Profile Header */}
-                <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-8">
-                  <div className="flex items-center space-x-6">
-                    <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center text-2xl font-bold text-green-600 shadow-lg">
+                <div className="bg-gradient-to-r from-green-500 to-green-600 px-4 lg:px-6 py-6 lg:py-8">
+                  <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                    <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-white flex items-center justify-center text-xl lg:text-2xl font-bold text-green-600 shadow-lg">
                       {getInitials(userData.name)}
                     </div>
-                    <div className="text-white">
-                      <h2 className="text-2xl font-bold">{userData.name || 'User'}</h2>
+                    <div className="text-white text-center sm:text-left">
+                      <h2 className="text-xl lg:text-2xl font-bold">{userData.name || 'User'}</h2>
                       <p className="text-green-100">{userData.email}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-8">
+                <div className="p-4 lg:p-8">
                   {isLoading ? (
                     <div className="flex justify-center items-center h-64">
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
@@ -204,8 +204,8 @@ const Profile = () => {
                   ) : error ? (
                     <div className="text-red-600 text-center py-4">{error}</div>
                   ) : (
-                    <form onSubmit={handleSubmit} className="space-y-8">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <form onSubmit={handleSubmit} className="space-y-6 lg:space-y-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8">
                         <div className="space-y-4">
                           <label className="block text-sm font-medium text-gray-700">Name</label>
                           <input
@@ -300,7 +300,7 @@ const Profile = () => {
                         </div>
                       </div>
 
-                      <div className="flex justify-end space-x-4 pt-6 border-t">
+                      <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4 pt-6 border-t">
                         {isEditing ? (
                           <>
                             <button
@@ -318,14 +318,14 @@ const Profile = () => {
                                   pincode: userData.pincode || '',
                                 });
                               }}
-                              className="px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 flex items-center font-medium transition-colors duration-200"
+                              className="w-full sm:w-auto px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 flex items-center justify-center font-medium transition-colors duration-200"
                             >
                               <X size={18} className="mr-2" />
                               Cancel
                             </button>
                             <button
                               type="submit"
-                              className="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center font-medium transition-colors duration-200"
+                              className="w-full sm:w-auto px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center justify-center font-medium transition-colors duration-200"
                             >
                               <Save size={18} className="mr-2" />
                               Save Changes
@@ -335,7 +335,7 @@ const Profile = () => {
                           <button
                             type="button"
                             onClick={() => setIsEditing(true)}
-                            className="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-colors duration-200"
+                            className="w-full sm:w-auto px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-colors duration-200"
                           >
                             Edit Profile
                           </button>
@@ -350,9 +350,9 @@ const Profile = () => {
         );
       case 'orders':
         return (
-          <div className="p-6 font-poppins">
-            <h2 className="text-2xl font-bold mb-4">My Orders</h2>
-            <div className="bg-white rounded-lg shadow p-6">
+          <div className="p-4 lg:p-6 font-poppins">
+            <h2 className="text-xl lg:text-2xl font-bold mb-4">My Orders</h2>
+            <div className="bg-white rounded-lg shadow p-4 lg:p-6">
               {isLoading ? (
                 <div className="flex justify-center items-center h-32">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
@@ -364,28 +364,28 @@ const Profile = () => {
               ) : (
                 orders.map((order) => (
                   <Link to={`/track/${order._id}`} key={order._id || order.id}>
-                  <div key={order._id || order.id} className="border-b py-4 last:border-b-0 ">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <p className="font-medium">Order #{order.orderId || order._id}</p>
-                        <p className="text-sm text-gray-500">
-                          {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Date not available'}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-medium">
-                         ₹{(order.totalAmount || 0).toFixed(2)}
-                        </p>
-                        <p className={`text-sm ${
-                          order.status === 'delivered' ? 'text-green-500' :
-                          order.status === 'pending' ? 'text-yellow-500' :
-                          'text-blue-500'
-                        }`}>
-                          {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Unknown Status'}
-                        </p>
+                    <div className="border-b py-4 last:border-b-0">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
+                        <div>
+                          <p className="font-medium">Order #{order.orderId || order._id}</p>
+                          <p className="text-sm text-gray-500">
+                            {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Date not available'}
+                          </p>
+                        </div>
+                        <div className="text-left sm:text-right">
+                          <p className="font-medium">
+                            ₹{(order.totalAmount || 0).toFixed(2)}
+                          </p>
+                          <p className={`text-sm ${
+                            order.status === 'delivered' ? 'text-green-500' :
+                            order.status === 'pending' ? 'text-yellow-500' :
+                            'text-blue-500'
+                          }`}>
+                            {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Unknown Status'}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   </Link>
                 ))
               )}
@@ -394,18 +394,18 @@ const Profile = () => {
         );
       case 'favorites':
         return (
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">My Favorites</h2>
-            <div className="bg-white rounded-lg shadow p-6">
+          <div className="p-4 lg:p-6">
+            <h2 className="text-xl lg:text-2xl font-bold mb-4">My Favorites</h2>
+            <div className="bg-white rounded-lg shadow p-4 lg:p-6">
               <p className="text-gray-500">No favorites found</p>
             </div>
           </div>
         );
       case 'settings':
         return (
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">Settings</h2>
-            <div className="bg-white rounded-lg shadow p-6">
+          <div className="p-4 lg:p-6">
+            <h2 className="text-xl lg:text-2xl font-bold mb-4">Settings</h2>
+            <div className="bg-white rounded-lg shadow p-4 lg:p-6">
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Notifications</label>
@@ -470,10 +470,10 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100 pt-15">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100 pt-15">
       {/* Sidebar */}
-      <div className="w-72 bg-white shadow-lg">
-        <div className="p-6 border-b border-gray-100">
+      <div className="w-full lg:w-72 bg-white shadow-lg">
+        <div className="p-4 lg:p-6 border-b border-gray-100">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-medium">
               {getInitials(userData.name)}
@@ -489,7 +489,7 @@ const Profile = () => {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center px-6 py-3.5 text-gray-700 hover:bg-gray-50 transition-colors duration-200 ${
+              className={`w-full flex items-center px-4 lg:px-6 py-3.5 text-gray-700 hover:bg-gray-50 transition-colors duration-200 ${
                 activeTab === item.id ? 'bg-green-50 text-green-600 border-r-4 border-green-600 font-medium' : ''
               }`}
             >
@@ -497,7 +497,7 @@ const Profile = () => {
               {item.label}
             </button>
           ))}
-          <button className="w-full flex items-center px-6 py-3.5 text-red-600 hover:bg-red-50 mt-4 transition-colors duration-200" onClick={() => {
+          <button className="w-full flex items-center px-4 lg:px-6 py-3.5 text-red-600 hover:bg-red-50 mt-4 transition-colors duration-200" onClick={() => {
             localStorage.removeItem('token');
             navigate('/auth');
           }}>
@@ -508,7 +508,7 @@ const Profile = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 py-10">
+      <div className="flex-1 py-4 lg:py-10">
         {renderContent()}
       </div>
     </div>
