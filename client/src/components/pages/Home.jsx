@@ -384,11 +384,18 @@ const Home = () => {
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="w-full h-full object-cover"
+                        className={`w-full h-full object-cover ${!product.inStock ? 'opacity-50' : ''}`}
                       />
                       {product.discount !== '0% off' && (
                         <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-medium">
                           {product.discount}
+                        </div>
+                      )}
+                      {!product.inStock && (
+                        <div className="absolute inset-0 bg-gray-200/50 flex items-center justify-center">
+                          <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+                            Out of Stock
+                          </span>
                         </div>
                       )}
                     </div>
@@ -410,12 +417,14 @@ const Home = () => {
                             </span>
                           )}
                         </div>
-                        <button
-                          onClick={() => addToCart(product)}
-                          className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors font-poppins"
-                        >
-                          Add to Cart
-                        </button>
+                        {product.inStock && (
+                          <button
+                            onClick={() => addToCart(product)}
+                            className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors font-poppins"
+                          >
+                            Add to Cart
+                          </button>
+                        )}
                       </div>
                     </div>
                   </motion.div>

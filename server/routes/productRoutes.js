@@ -17,6 +17,7 @@ router.get('/products', async (req, res) => {
 // Add new product (admin only)
 router.post('/products', verifyToken, verifyAdmin, async (req, res) => {
     try {
+
         const product = new Product(req.body);
         await product.save();
         res.status(201).json({ message: "Product added successfully", product });

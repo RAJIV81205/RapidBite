@@ -9,6 +9,7 @@ const Products = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     originalPrice: '',
@@ -129,6 +130,7 @@ const Products = () => {
     }
     
     try {
+      setIsSubmitting(true);
       const productData = {
         ...formData,
         originalPrice: Number(formData.originalPrice),
@@ -166,6 +168,8 @@ const Products = () => {
     } catch (error) {
       setError(error.message);
       console.error('Error adding product:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -194,6 +198,7 @@ const Products = () => {
     }
     
     try {
+      setIsSubmitting(true);
       const productData = {
         ...formData,
         originalPrice: Number(formData.originalPrice),
@@ -232,6 +237,8 @@ const Products = () => {
     } catch (error) {
       setError(error.message);
       console.error('Error updating product:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -517,14 +524,23 @@ const Products = () => {
                   type="button"
                   onClick={() => setShowAddModal(false)}
                   className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center"
+                  disabled={isSubmitting}
                 >
-                  Add Product
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Adding...
+                    </>
+                  ) : (
+                    'Add Product'
+                  )}
                 </button>
               </div>
             </form>
@@ -700,14 +716,23 @@ const Products = () => {
                   type="button"
                   onClick={() => setShowEditModal(false)}
                   className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center"
+                  disabled={isSubmitting}
                 >
-                  Update Product
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Updating...
+                    </>
+                  ) : (
+                    'Update Product'
+                  )}
                 </button>
               </div>
             </form>
