@@ -10,6 +10,7 @@ const Products = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     originalPrice: '',
@@ -264,6 +265,15 @@ const Products = () => {
     }
   };
 
+  const filteredProducts = products.filter(product => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      product.name.toLowerCase().includes(searchLower) ||
+      product.description.toLowerCase().includes(searchLower) ||
+      product.category.toLowerCase().includes(searchLower)
+    );
+  });
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -291,6 +301,8 @@ const Products = () => {
           <input
             type="text"
             placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
@@ -302,9 +314,9 @@ const Products = () => {
           <div className="flex justify-center items-center h-64">
             <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
           </div>
-        ) : products.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            No products found
+            {searchQuery ? 'No products found matching your search' : 'No products found'}
           </div>
         ) : (
           <table className="w-full">
@@ -319,7 +331,7 @@ const Products = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <tr key={product._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
                     <img src={product.image} alt={product.name} className="w-16 h-16 object-cover rounded" />
