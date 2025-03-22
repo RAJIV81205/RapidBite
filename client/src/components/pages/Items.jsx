@@ -3,22 +3,39 @@ import { motion } from "framer-motion";
 import { useParams } from "react-router";
 import { useCart } from "../CartContext";
 import Cart from "../Cart";
-import { categoryProducts, allCategories } from "../constants";
+import { allCategories } from "../constants";
 import { ProductCardSkeleton } from "../Skeletons";
 
 const Items = () => {
   const { categoryId } = useParams();
   const { addToCart } = useCart();
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [products, setProducts] = useState([]);
+  const url = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await fetch(`${url}/products/category/${categoryId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await response.json();
+        console.log(data);
+        setProducts(data.products);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching products:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
-  }, []);
+    fetchProducts();
+  }, [categoryId]);
 
   if (isLoading) {
     return (
@@ -48,7 +65,24 @@ const Items = () => {
     );
   }
 
-  const products = categoryProducts[categoryId] || [];
+  if (error) {
+    return (
+      <div className="min-h-screen bg-transparent mt-15">
+        <div className="max-w-[95%] sm:max-w-[80%] mx-auto py-4 sm:py-6">
+          <div className="text-center py-12">
+            <p className="text-red-500 text-lg">Error: {error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const category = allCategories.find(cat => cat.id.toString() === categoryId);
 
   return (
@@ -81,7 +115,7 @@ const Items = () => {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-medium">
-                  {product.discount}
+                  {product.discount}% off
                 </div>
               </div>
               <div className="p-3 sm:p-4">
@@ -94,7 +128,7 @@ const Items = () => {
                 <div className="flex justify-between items-center">
                   <div className="flex flex-col">
                     <span className="text-green-600 font-bold text-base sm:text-lg font-poppins">
-                      {product.price}
+                      {product.discountPrice}
                     </span>
                     <span className="text-xs sm:text-sm text-gray-500 line-through font-poppins">
                       {product.originalPrice}

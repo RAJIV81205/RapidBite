@@ -26,19 +26,38 @@ export const CartProvider = ({ children }) => {
   }, [cartItems]);
 
   const addToCart = (item) => {
+    // Log the item to debug
+    console.log('Adding item to cart:', item);
+
+    // Check if item exists and has required properties
+    if (!item || !item._id) {
+      console.error('Invalid item added to cart:', item);
+      return;
+    }
+
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
+      const existingItem = prevItems.find((i) => i._id === item._id);
       if (existingItem) {
         return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: (i.quantity || 1) + 1 } : i
+          i._id === item._id ? { ...i, quantity: (i.quantity || 1) + 1 } : i
         );
       }
-      return [...prevItems, { ...item, quantity: 1 }];
+      // Create a new cart item with the correct structure
+      return [...prevItems, { 
+        _id: item._id,
+        name: item.name,
+        image: item.image,
+        quantity: 1,
+        price: item.discountPrice,
+        originalPrice: item.originalPrice,
+        weight: item.weight,
+        volume: item.volume
+      }];
     });
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    setCartItems((prevItems) => prevItems.filter((item) => item._id !== itemId));
   };
 
   const updateQuantity = (itemId, newQuantity) => {
@@ -48,7 +67,7 @@ export const CartProvider = ({ children }) => {
     }
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === itemId ? { ...item, quantity: newQuantity } : item
+        item._id === itemId ? { ...item, quantity: newQuantity } : item
       )
     );
   };
@@ -60,8 +79,17 @@ export const CartProvider = ({ children }) => {
 
   const getCartTotal = () => {
     return cartItems.reduce((total, item) => {
-      const price = parseFloat(item.price.replace("₹", ""));
-      return total + price * (item.quantity || 1);
+      if (!item || !item.price) return total;
+      try {
+        // Handle both string and number price formats
+        const price = typeof item.price === 'string' 
+          ? parseFloat(item.price.replace(/[₹,]/g, ''))
+          : item.price;
+        return total + (isNaN(price) ? 0 : price * (item.quantity || 1));
+      } catch (error) {
+        console.error('Error calculating price for item:', item);
+        return total;
+      }
     }, 0);
   };
 

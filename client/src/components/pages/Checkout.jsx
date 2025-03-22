@@ -243,7 +243,12 @@ const Checkout = () => {
                     <p className="text-sm text-gray-500">{item.quantity}</p>
                     <div className="flex items-center justify-between mt-2">
                       <span className="font-semibold">
-                        ₹{parseFloat(item.price.replace('₹', '')) * item.quantity}
+                        ₹{(() => {
+                          const price = typeof item.price === 'string'
+                            ? parseFloat(item.price.replace(/[₹,]/g, ''))
+                            : item.price;
+                          return (price || 0) * (item.quantity || 1);
+                        })()}
                       </span>
                       <span className="text-sm text-gray-500">
                         Qty: {item.quantity}
