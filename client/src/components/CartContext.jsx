@@ -30,25 +30,25 @@ export const CartProvider = ({ children }) => {
     console.log('Adding item to cart:', item);
 
     // Check if item exists and has required properties
-    if (!item || !item._id) {
+    if (!item || !item.id) {
       console.error('Invalid item added to cart:', item);
       return;
     }
 
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i._id === item._id);
+      const existingItem = prevItems.find((i) => i.id === item.id);
       if (existingItem) {
         return prevItems.map((i) =>
-          i._id === item._id ? { ...i, quantity: (i.quantity || 1) + 1 } : i
+          i.id === item.id ? { ...i, quantity: (i.quantity || 1) + 1 } : i
         );
       }
       // Create a new cart item with the correct structure
       return [...prevItems, { 
-        _id: item._id,
+        id: item.id,
         name: item.name,
         image: item.image,
         quantity: 1,
-        price: item.discountPrice,
+        price: item.price,
         originalPrice: item.originalPrice,
         weight: item.weight,
         volume: item.volume
@@ -57,7 +57,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item._id !== itemId));
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   };
 
   const updateQuantity = (itemId, newQuantity) => {
@@ -67,7 +67,7 @@ export const CartProvider = ({ children }) => {
     }
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item._id === itemId ? { ...item, quantity: newQuantity } : item
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
       )
     );
   };
@@ -84,7 +84,7 @@ export const CartProvider = ({ children }) => {
         // Handle both string and number price formats
         const price = typeof item.price === 'string' 
           ? parseFloat(item.price.replace(/[₹,]/g, ''))
-          : item.price;
+          : parseFloat(item.price);
         return total + (isNaN(price) ? 0 : price * (item.quantity || 1));
       } catch (error) {
         console.error('Error calculating price for item:', item);

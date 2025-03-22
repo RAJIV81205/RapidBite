@@ -84,7 +84,7 @@ const Header = () => {
           }
         },
         (error) => {
-          console.log(error);
+          console.error(error);
         }
       );
     } else {

@@ -135,7 +135,16 @@ const Items = () => {
                     </span>
                   </div>
                   <button
-                    onClick={() => addToCart(product)}
+                    onClick={() => addToCart({
+                      id: product._id,
+                      name: product.name,
+                      image: product.image,
+                      price: product.discountPrice,
+                      originalPrice: product.originalPrice,
+                      quantity: product.quantity,
+                      weight: product.weight,
+                      volume: product.volume
+                    })}
                     className="bg-green-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm hover:bg-green-700 transition-colors font-poppins"
                   >
                     Add to Cart

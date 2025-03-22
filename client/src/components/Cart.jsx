@@ -63,7 +63,7 @@ const Cart = () => {
                 <div className="space-y-4">
                   {cartItems.map(item => (
                     <div
-                      key={item._id}
+                      key={item.id}
                       className="flex items-center gap-4 bg-white p-3 sm:p-4 rounded-lg border"
                     >
                       <img
@@ -82,7 +82,7 @@ const Cart = () => {
                               ₹{(() => {
                                 const price = typeof item.price === 'string' 
                                   ? parseFloat(item.price.replace(/[₹,]/g, ''))
-                                  : item.price;
+                                  : parseFloat(item.price);
                                 return (price || 0) * (item.quantity || 1);
                               })()}
                             </span>
@@ -91,7 +91,7 @@ const Cart = () => {
                                 ₹{(() => {
                                   const price = typeof item.originalPrice === 'string'
                                     ? parseFloat(item.originalPrice.replace(/[₹,]/g, ''))
-                                    : item.originalPrice;
+                                    : parseFloat(item.originalPrice);
                                   return (price || 0) * (item.quantity || 1);
                                 })()}
                               </span>
@@ -99,14 +99,14 @@ const Cart = () => {
                           </div>
                           <div className="flex items-center gap-2">
                             <button
-                              onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
                               className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
                             >
                               -
                             </button>
                             <span className="w-6 sm:w-8 text-center">{item.quantity}</span>
                             <button
-                              onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
                               className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
                             >
                               +
@@ -115,7 +115,7 @@ const Cart = () => {
                         </div>
                       </div>
                       <button
-                        onClick={() => removeFromCart(item._id)}
+                        onClick={() => removeFromCart(item.id)}
                         className="text-red-500 hover:text-red-700"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

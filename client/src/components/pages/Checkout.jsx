@@ -170,6 +170,7 @@ const Checkout = () => {
           mobile: formData.phone,
         }),
       });
+      const data = await orderResponse.json();
 
       if (!orderResponse.ok) {
         throw new Error('Failed to create order');
@@ -177,7 +178,7 @@ const Checkout = () => {
 
       // Clear cart and redirect to profile
       clearCart();
-      navigate('/profile');
+      navigate(`/track/${data.newOrder._id}`);
     } catch (error) {
       console.error('Error creating order:', error);
       alert('Failed to create order. Please try again.');
