@@ -77,7 +77,7 @@ router.get('/admin/orders', verifyToken, verifyAdmin, async (req, res) => {
 router.patch('/admin/orders/:orderId', verifyToken, verifyAdmin, async (req, res) => {
     try {
         const { status } = req.body;
-        const order = await Order.findByIdAndUpdate(req.params.orderId, { status }, { new: true });
+        const order = await Order.findByIdAndUpdate(req.params.orderId, { status , updatedAt: Date.now() }, { new: true });
         res.status(200).json({ message: "Order status updated successfully", order });
     } catch (error) {
         console.log(error);
