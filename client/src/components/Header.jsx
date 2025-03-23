@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useCart } from "./CartContext";
 import { Link, useLocation } from "react-router";
 import { HeaderSkeleton } from "./Skeletons";
-import debounce from 'lodash/debounce';
 import React from 'react';
 
 // Memoized location button component
@@ -152,20 +151,12 @@ const Header = () => {
     },
   }), []);
 
-  const debouncedSearch = useMemo(
-    () =>
-      debounce((query) => {
-        // Implement your search logic here
-        console.log('Searching for:', query);
-      }, 300),
-    []
-  );
-
   const handleSearchChange = useCallback((e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    debouncedSearch(query);
-  }, [debouncedSearch]);
+    // Implement your search logic here
+    console.log('Searching for:', query);
+  }, []);
 
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(prev => !prev);
