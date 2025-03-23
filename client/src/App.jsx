@@ -14,6 +14,7 @@ import Track from "./components/pages/Track";
 import Dashboard from './components/pages/Admin/Dashboard';
 import Products from './components/pages/Admin/Products';
 import Orders from './components/pages/Admin/Orders';
+import Analytics from './components/pages/Admin/Analytics';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Dashboard />}>
+            <Route path="analytics" element={<Analytics />} />
             <Route path="products" element={<Products />} />
             <Route path="orders" element={<Orders />} />
           </Route>
