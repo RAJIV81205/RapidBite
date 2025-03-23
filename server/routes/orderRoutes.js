@@ -1,5 +1,6 @@
 import express from 'express';
 import Order from '../models/Order.js';
+import Product from '../models/Products.js';
 import { verifyToken, verifyAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -117,8 +118,9 @@ router.get('/admin/analytics', verifyToken, verifyAdmin, async (req, res) => {
     try {
         const orders = await Order.find();
         const totalRevenue = orders.reduce((total, order) => order.status !== 'canceled' ? total + order.totalAmount : total, 0);
-        const totalOrders = orders.length;
-        const totalProducts = orders.reduce((total, order) => total + order.items.length, 0);
+        const totalOrders = orders.filter(order => order.status !== 'canceled').length;
+        const products = await Product.find();
+        const totalProducts = products.length;
         res.status(200).json({ totalRevenue, totalOrders, totalProducts });
     } catch (error) {
         console.log(error); 

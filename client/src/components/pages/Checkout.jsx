@@ -162,7 +162,7 @@ const Checkout = () => {
         },
         body: JSON.stringify({
           items: cartItems,
-          totalAmount: total,
+          totalAmount: total.toFixed(2),
           address: formData.address,
           city: formData.city,
           state: formData.state,
