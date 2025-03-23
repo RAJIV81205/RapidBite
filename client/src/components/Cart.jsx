@@ -1,7 +1,70 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useCart } from './CartContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router';
+
+// Memoized CartItem component
+const CartItem = React.memo(({ item, onUpdateQuantity, onRemove }) => (
+  <div className="flex items-center gap-4 bg-white p-3 sm:p-4 rounded-lg border">
+    <img
+      src={item.image}
+      alt={item.name}
+      className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md"
+      loading="lazy"
+    />
+    <div className="flex-1">
+      <h3 className="font-medium">{item.name}</h3>
+      <p className="text-sm text-gray-500">
+        {item.weight || item.volume || item.quantity}
+      </p>
+      <div className="flex items-center justify-between mt-2">
+        <div className="flex flex-col">
+          <span className="font-semibold text-green-600">
+            ₹{(() => {
+              const price = typeof item.price === 'string' 
+                ? parseFloat(item.price.replace(/[₹,]/g, ''))
+                : parseFloat(item.price);
+              return (price || 0) * (item.quantity || 1);
+            })()}
+          </span>
+          {item.originalPrice && (
+            <span className="text-xs text-gray-500 line-through">
+              ₹{(() => {
+                const price = typeof item.originalPrice === 'string'
+                  ? parseFloat(item.originalPrice.replace(/[₹,]/g, ''))
+                  : parseFloat(item.originalPrice);
+                return (price || 0) * (item.quantity || 1);
+              })()}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+            className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
+          >
+            -
+          </button>
+          <span className="w-6 sm:w-8 text-center">{item.quantity}</span>
+          <button
+            onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+            className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
+          >
+            +
+          </button>
+        </div>
+      </div>
+    </div>
+    <button
+      onClick={() => onRemove(item.id)}
+      className="text-red-500 hover:text-red-700"
+    >
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+      </svg>
+    </button>
+  </div>
+));
 
 const Cart = () => {
   const {
@@ -13,12 +76,14 @@ const Cart = () => {
     toggleCart
   } = useCart();
 
-  if (!isCartOpen) return null;
-
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     localStorage.removeItem('cart');
     window.location.reload();
-  };
+  }, []);
+
+  const memoizedCartTotal = useMemo(() => getCartTotal(), [cartItems]);
+
+  if (!isCartOpen) return null;
 
   return (
     <AnimatePresence>
@@ -62,67 +127,12 @@ const Cart = () => {
               ) : (
                 <div className="space-y-4">
                   {cartItems.map(item => (
-                    <div
+                    <CartItem
                       key={item.id}
-                      className="flex items-center gap-4 bg-white p-3 sm:p-4 rounded-lg border"
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md"
-                      />
-                      <div className="flex-1">
-                        <h3 className="font-medium">{item.name}</h3>
-                        <p className="text-sm text-gray-500">
-                          {item.weight || item.volume || item.quantity}
-                        </p>
-                        <div className="flex items-center justify-between mt-2">
-                          <div className="flex flex-col">
-                            <span className="font-semibold text-green-600">
-                              ₹{(() => {
-                                const price = typeof item.price === 'string' 
-                                  ? parseFloat(item.price.replace(/[₹,]/g, ''))
-                                  : parseFloat(item.price);
-                                return (price || 0) * (item.quantity || 1);
-                              })()}
-                            </span>
-                            {item.originalPrice && (
-                              <span className="text-xs text-gray-500 line-through">
-                                ₹{(() => {
-                                  const price = typeof item.originalPrice === 'string'
-                                    ? parseFloat(item.originalPrice.replace(/[₹,]/g, ''))
-                                    : parseFloat(item.originalPrice);
-                                  return (price || 0) * (item.quantity || 1);
-                                })()}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
-                            >
-                              -
-                            </button>
-                            <span className="w-6 sm:w-8 text-center">{item.quantity}</span>
-                            <button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => removeFromCart(item.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
+                      item={item}
+                      onUpdateQuantity={updateQuantity}
+                      onRemove={removeFromCart}
+                    />
                   ))}
                 </div>
               )}
@@ -130,25 +140,25 @@ const Cart = () => {
 
             {/* Cart Footer */}
             {cartItems.length > 0 && (
-                <div className="border-t p-4 sm:p-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-lg font-semibold">Total:</span>
-                  <span className="text-lg font-semibold">₹{getCartTotal()}</span>
+              <div className="border-t p-4 sm:p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-lg font-semibold">Total:</span>
+                  <span className="text-lg font-semibold">₹{memoizedCartTotal}</span>
                 </div>
                 <div className='flex flex-col sm:flex-row justify-between items-center gap-4'>
-                <button
-                  className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors font-poppins"
-                  onClick={() => clearCart()}
-                >
-                  Clear Cart
-                </button>
-                <Link to="/checkout" className='w-full'>
-                <button
-                  className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors font-poppins"
-                  onClick={toggleCart}
-                >
-                  Proceed to Checkout
+                  <button
+                    className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors font-poppins"
+                    onClick={clearCart}
+                  >
+                    Clear Cart
                   </button>
+                  <Link to="/checkout" className='w-full'>
+                    <button
+                      className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors font-poppins"
+                      onClick={toggleCart}
+                    >
+                      Proceed to Checkout
+                    </button>
                   </Link>
                 </div>
               </div>
@@ -160,4 +170,4 @@ const Cart = () => {
   );
 };
 
-export default Cart; 
+export default React.memo(Cart); 

@@ -1,10 +1,48 @@
 import { User, Search, ShoppingCart, MapPin, Bell } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useCart } from "./CartContext";
 import { Link, useLocation } from "react-router";
 import { HeaderSkeleton } from "./Skeletons";
+import debounce from 'lodash/debounce';
+import React from 'react';
 
+// Memoized location button component
+const LocationButton = React.memo(({ userLocation }) => (
+  <button className="hidden md:flex items-center gap-2 px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
+    <MapPin className="w-5 h-5 text-primary" />
+    <span className="text-sm font-medium text-neutral-700 truncate max-w-[150px]">
+      {userLocation}
+    </span>
+  </button>
+));
+
+// Memoized profile button component
+const ProfileButton = React.memo(({ isLoggedIn, user }) => (
+  isLoggedIn ? (
+    <Link to="/profile">
+      <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
+        <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
+          <User className="w-4 h-4 text-neutral-600" />
+        </div>
+        <span className="text-sm font-medium text-neutral-700 hidden md:inline">
+          {user?.name || 'User'}
+        </span>
+      </button>
+    </Link>
+  ) : (
+    <Link to="/auth">
+      <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
+        <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
+          <User className="w-4 h-4 text-neutral-600" />
+        </div>
+        <span className="text-sm font-medium text-neutral-700 hidden md:inline">
+          Login
+        </span>
+      </button>
+    </Link>
+  )
+));
 
 const Header = () => {
   const currentLocation = useLocation();
@@ -15,14 +53,14 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const token = localStorage.getItem("token");
   const url = import.meta.env.VITE_BACKEND_URL;
 
-  const verifyToken = async () => {
+  const verifyToken = useCallback(async () => {
     try {
       setIsLoading(true);
-      
 
       if (!token) {
         setIsLoggedIn(false);
@@ -57,17 +95,13 @@ const Header = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [token, url]);
 
   useEffect(() => {
     verifyToken();
-  }, [token, currentLocation.pathname]);
+  }, [verifyToken, currentLocation.pathname]);
 
-  useEffect(() => {
-    getLocation();
-  }, []);
-
-  const getLocation = () => {
+  const getLocation = useCallback(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -90,9 +124,13 @@ const Header = () => {
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
-  };
+  }, []);
 
-  const containerVariants = {
+  useEffect(() => {
+    getLocation();
+  }, [getLocation]);
+
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -100,9 +138,9 @@ const Header = () => {
         staggerChildren: 0.1,
       },
     },
-  };
+  }), []);
 
-  const itemVariants = {
+  const itemVariants = useMemo(() => ({
     hidden: { y: -20, opacity: 0 },
     visible: {
       y: 0,
@@ -112,7 +150,26 @@ const Header = () => {
         stiffness: 100,
       },
     },
-  };
+  }), []);
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((query) => {
+        // Implement your search logic here
+        console.log('Searching for:', query);
+      }, 300),
+    []
+  );
+
+  const handleSearchChange = useCallback((e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    debouncedSearch(query);
+  }, [debouncedSearch]);
+
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(prev => !prev);
+  }, []);
 
   if (isLoading) {
     return <HeaderSkeleton />;
@@ -137,7 +194,12 @@ const Header = () => {
           <Link to="/">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                <img src="/logo.png" alt="logo" className="w-100% h-full object-cover" />
+                <img 
+                  src="/logo.png" 
+                  alt="logo" 
+                  className="w-100% h-full object-cover"
+                  loading="lazy"
+                />
               </div>
               <h1 className="text-xl sm:text-2xl font-bold">
                 <span className="text-primary">Rapid</span>
@@ -160,6 +222,8 @@ const Header = () => {
             <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
             <input
               type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
               placeholder="What would you like to eat?"
               className="w-full h-12 rounded-full border-2 border-neutral-200 pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-base placeholder:text-neutral-400"
               onFocus={() => setIsSearchFocused(true)}
@@ -174,17 +238,12 @@ const Header = () => {
           variants={itemVariants}
         >
           {/* Location */}
-          <button className="hidden md:flex items-center gap-2 px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
-            <MapPin className="w-5 h-5 text-primary" />
-            <span className="text-sm font-medium text-neutral-700 truncate max-w-[150px]">
-              {userLocation}
-            </span>
-          </button>
+          <LocationButton userLocation={userLocation} />
 
           {/* Search Button for Mobile */}
           <button
             className="sm:hidden p-2 hover:bg-neutral-100 rounded-full transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={toggleMobileMenu}
           >
             <Search className="w-5 h-5 text-neutral-700" />
           </button>
@@ -213,28 +272,8 @@ const Header = () => {
           {/* Profile */}
           {isLoading ? (
             <div className="w-8 h-8 bg-neutral-200 rounded-full animate-pulse" />
-          ) : isLoggedIn ? (
-            <Link to="/profile">
-              <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
-                <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-neutral-600" />
-                </div>
-                <span className="text-sm font-medium text-neutral-700 hidden md:inline">
-                  {user?.name || 'User'}
-                </span>
-              </button>
-            </Link>
           ) : (
-            <Link to="/auth">
-              <button className="flex items-center gap-2 px-2 sm:px-4 py-2 hover:bg-neutral-100 rounded-full transition-colors">
-                <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-neutral-600" />
-                </div>
-                <span className="text-sm font-medium text-neutral-700 hidden md:inline">
-                  Login
-                </span>
-              </button>
-            </Link>
+            <ProfileButton isLoggedIn={isLoggedIn} user={user} />
           )}
         </motion.div>
       </motion.div>
@@ -253,8 +292,10 @@ const Header = () => {
           <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
           <input
             type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
             placeholder="What would you like to eat?"
-            className="w-full h-10 rounded-full border-2 border-neutral-200 pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-base placeholder:text-neutral-400"
+            className="w-full h-12 rounded-full border-2 border-neutral-200 pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-base placeholder:text-neutral-400"
           />
         </div>
       </motion.div>
@@ -282,4 +323,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

@@ -83,10 +83,10 @@ const Items = () => {
     );
   }
 
-  const category = allCategories.find(cat => cat.id.toString() === categoryId);
+  const category = allCategories.find(cat => cat.name.toString() === categoryId);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 sm:py-20">
+    <div className="min-h-screen bg-gray-50 py-8 sm:py-20 mt-12">
       <div className="max-w-[95%] sm:max-w-[80%] mx-auto">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ const Items = () => {
           <p className="text-gray-600">{products.length} products</p>
         </div>
 
-        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
           {products.map((product) => (
             <motion.div
               key={product.id}
@@ -128,10 +128,10 @@ const Items = () => {
                 <div className="flex justify-between items-center">
                   <div className="flex flex-col">
                     <span className="text-green-600 font-bold text-base sm:text-lg font-poppins">
-                      {product.discountPrice}
+                    ₹ {product.discountPrice}
                     </span>
                     <span className="text-xs sm:text-sm text-gray-500 line-through font-poppins">
-                      {product.originalPrice}
+                    ₹ {product.originalPrice}
                     </span>
                   </div>
                   <button
@@ -145,7 +145,7 @@ const Items = () => {
                       weight: product.weight,
                       volume: product.volume
                     })}
-                    className="bg-green-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm hover:bg-green-700 transition-colors font-poppins"
+                    className="bg-green-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm hover:bg-green-700 transition-colors font-poppins whitespace-nowrap min-w-[90px] sm:min-w-[100px]"
                   >
                     Add to Cart
                   </button>

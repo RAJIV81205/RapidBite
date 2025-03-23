@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
 const CartContext = createContext();
 
@@ -25,10 +25,7 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (item) => {
-    // Log the item to debug
-    console.log('Adding item to cart:', item);
-
+  const addToCart = useCallback((item) => {
     // Check if item exists and has required properties
     if (!item || !item.id) {
       console.error('Invalid item added to cart:', item);
@@ -54,13 +51,13 @@ export const CartProvider = ({ children }) => {
         volume: item.volume
       }];
     });
-  };
+  }, []);
 
-  const removeFromCart = (itemId) => {
+  const removeFromCart = useCallback((itemId) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-  };
+  }, []);
 
-  const updateQuantity = (itemId, newQuantity) => {
+  const updateQuantity = useCallback((itemId, newQuantity) => {
     if (newQuantity < 1) {
       removeFromCart(itemId);
       return;
@@ -70,18 +67,17 @@ export const CartProvider = ({ children }) => {
         item.id === itemId ? { ...item, quantity: newQuantity } : item
       )
     );
-  };
+  }, [removeFromCart]);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCartItems([]);
     localStorage.removeItem("cart");
-  };
+  }, []);
 
-  const getCartTotal = () => {
+  const getCartTotal = useCallback(() => {
     return cartItems.reduce((total, item) => {
       if (!item || !item.price) return total;
       try {
-        // Handle both string and number price formats
         const price = typeof item.price === 'string' 
           ? parseFloat(item.price.replace(/[₹,]/g, ''))
           : parseFloat(item.price);
@@ -91,17 +87,17 @@ export const CartProvider = ({ children }) => {
         return total;
       }
     }, 0);
-  };
+  }, [cartItems]);
 
-  const getCartCount = () => {
+  const getCartCount = useCallback(() => {
     return cartItems.reduce((count, item) => count + (item.quantity || 0), 0);
-  };
+  }, [cartItems]);
 
-  const toggleCart = () => {
+  const toggleCart = useCallback(() => {
     setIsCartOpen(prev => !prev);
-  };
+  }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     cartItems,
     addToCart,
     removeFromCart,
@@ -112,7 +108,18 @@ export const CartProvider = ({ children }) => {
     isCartOpen,
     toggleCart,
     setIsCartOpen
-  };
+  }), [
+    cartItems,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    getCartTotal,
+    getCartCount,
+    isCartOpen,
+    toggleCart,
+    setIsCartOpen
+  ]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }; 
