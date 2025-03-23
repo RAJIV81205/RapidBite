@@ -111,9 +111,25 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Navigation Boxes */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-8">
+          {/* Analytics Box */}
+          <div 
+            className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 cursor-pointer group"
+            onClick={() => navigate('/admin')}
+          >
+            <div className="flex items-center gap-4">
+              <div  className="bg-blue-50 p-3 rounded-lg group-hover:bg-blue-100 transition-colors">
+                <Package className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">Analytics</h3>
+                <p className="text-sm text-gray-500">View analytics</p>
+              </div>
+            </div>
+          </div>
+
           {/* Products Box */}
           <div 
             className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 cursor-pointer group"

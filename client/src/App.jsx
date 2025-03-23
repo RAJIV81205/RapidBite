@@ -34,7 +34,7 @@ function App() {
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Dashboard />}>
-            <Route path="analytics" element={<Analytics />} />
+            <Route index element={<Analytics />} />
             <Route path="products" element={<Products />} />
             <Route path="orders" element={<Orders />} />
           </Route>

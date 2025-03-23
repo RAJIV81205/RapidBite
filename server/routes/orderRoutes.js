@@ -84,7 +84,7 @@ router.patch('/admin/orders/:orderId', verifyToken, verifyAdmin, async (req, res
     }
 });
 
-router.post('/admin/orders/:orderId/cancel', verifyToken, async (req, res) => {
+router.post('/admin/orders/:orderId/cancel', verifyToken , async (req, res) => {
     try {
         const { orderId } = req.params;
 
@@ -110,6 +110,19 @@ router.post('/admin/orders/:orderId/cancel', verifyToken, async (req, res) => {
     } catch (error) {
         console.error('Error canceling order:', error);
         res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get('/admin/analytics', verifyToken, verifyAdmin, async (req, res) => {
+    try {
+        const orders = await Order.find();
+        const totalRevenue = orders.reduce((total, order) => order.status !== 'canceled' ? total + order.totalAmount : total, 0);
+        const totalOrders = orders.length;
+        const totalProducts = orders.reduce((total, order) => total + order.items.length, 0);
+        res.status(200).json({ totalRevenue, totalOrders, totalProducts });
+    } catch (error) {
+        console.log(error); 
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
