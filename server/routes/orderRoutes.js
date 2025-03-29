@@ -148,11 +148,32 @@ const sendEmail = async (email, subject, text) => {
         // Verify transporter configuration
         await transporter.verify();
 
+        const htmlContent = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #333;">Order Confirmation</h2>
+                <p>Dear Customer,</p>
+                <p>${text}</p>
+                <hr style="border: 1px solid #eee; margin: 20px 0;">
+                <p style="color: #666; font-size: 14px;">
+                    Best regards,<br>
+                    RapidBite Team
+                </p>
+            </div>
+        `;
+
         const mailOptions = {
-            from: 'oraxle81205@gmail.com',
+            from: {
+                name: 'RapidBite',
+                address: 'oraxle81205@gmail.com'
+            },
             to: email,
-            subject,
-            text,
+            subject: subject,
+            html: htmlContent,
+            headers: {
+                'List-Unsubscribe': `<mailto:oraxle81205@gmail.com?subject=unsubscribe>`,
+                'Precedence': 'bulk',
+                'X-Auto-Response-Suppress': 'OOF, AutoReply'
+            }
         };
 
         const info = await transporter.sendMail(mailOptions);
