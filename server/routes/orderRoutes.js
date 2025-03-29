@@ -1,6 +1,7 @@
 import express from 'express';
 import Order from '../models/Order.js';
 import Product from '../models/Products.js';
+import User from '../models/User.js';
 import { verifyToken, verifyAdmin } from '../middleware/auth.js';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
@@ -83,7 +84,9 @@ router.patch('/admin/orders/:orderId', verifyToken, verifyAdmin, async (req, res
     try {
         const { status } = req.body;
         const order = await Order.findByIdAndUpdate(req.params.orderId, { status , updatedAt: Date.now() }, { new: true });
+        const user = await User.findById(order.userId);
         res.status(200).json({ message: "Order status updated successfully", order });
+        await sendEmail(user.email, "Order status updated", `Your order ${order.orderId} has been ${status}`, order);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
@@ -232,7 +235,7 @@ const sendEmail = async (email, subject, text, order) => {
                     
                     <div class="content">
                         <p>Dear Customer,</p>
-                        <p>Thank you for your order! We're excited to confirm that your order has been successfully placed.</p>
+                        <p>${text}</p>
                         
                         <div class="order-details">
                             <h3>Order Details</h3>
