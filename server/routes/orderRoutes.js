@@ -2,6 +2,10 @@ import express from 'express';
 import Order from '../models/Order.js';
 import Product from '../models/Products.js';
 import { verifyToken, verifyAdmin } from '../middleware/auth.js';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 
@@ -30,6 +34,7 @@ router.post('/create-order', verifyToken, async (req, res) => {
         await newOrder.save();
 
         res.status(201).json({ message: "Order created successfully", orderId, newOrder });
+        await sendEmail(req.user.email, "Order created successfully", `Your order ${orderId} has been created successfully`);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
@@ -127,5 +132,40 @@ router.get('/admin/analytics', verifyToken, verifyAdmin, async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
+const sendEmail = async (email, subject, text) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: 'oraxle81205@gmail.com',
+                pass: process.env.PASSWORD,
+            },
+        });
+
+        // Verify transporter configuration
+        await transporter.verify();
+
+        const mailOptions = {
+            from: 'oraxle81205@gmail.com',
+            to: email,
+            subject,
+            text,
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully:', info.response);
+    } catch (error) {
+        console.error('Detailed error sending email:', {
+            message: error.message,
+            code: error.code,
+            command: error.command,
+            response: error.response,
+            responseCode: error.responseCode
+        });
+    }
+};
 
 export default router; 
