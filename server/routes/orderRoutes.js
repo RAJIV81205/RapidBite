@@ -114,6 +114,8 @@ router.post('/admin/orders/:orderId/cancel', verifyToken , async (req, res) => {
         order.status = 'canceled';
         order.updatedAt = Date.now();
         await order.save();
+        const user = await User.findById(order.userId);
+        await sendEmail(user.email, "Order canceled", `Your order ${order.orderId} has been canceled`, order);
 
         res.status(200).json({ message: 'Order canceled successfully', order });
     } catch (error) {
