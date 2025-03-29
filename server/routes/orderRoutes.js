@@ -34,7 +34,7 @@ router.post('/create-order', verifyToken, async (req, res) => {
         await newOrder.save();
 
         res.status(201).json({ message: "Order created successfully", orderId, newOrder });
-        await sendEmail(req.user.email, "Order created successfully", `Your order ${orderId} has been created successfully`);
+        await sendEmail(req.user.email, "Order created successfully", `Your order ${orderId} has been created successfully`, newOrder);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
@@ -133,7 +133,7 @@ router.get('/admin/analytics', verifyToken, verifyAdmin, async (req, res) => {
     }
 });
 
-const sendEmail = async (email, subject, text) => {
+const sendEmail = async (email, subject, text, order) => {
     try {
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -149,16 +149,134 @@ const sendEmail = async (email, subject, text) => {
         await transporter.verify();
 
         const htmlContent = `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #333;">Order Confirmation</h2>
-                <p>Dear Customer,</p>
-                <p>${text}</p>
-                <hr style="border: 1px solid #eee; margin: 20px 0;">
-                <p style="color: #666; font-size: 14px;">
-                    Best regards,<br>
-                    RapidBite Team
-                </p>
-            </div>
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        line-height: 1.6;
+                        color: #333;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background-color: #ffffff;
+                    }
+                    .header {
+                        background-color: #4CAF50;
+                        color: white;
+                        padding: 20px;
+                        text-align: center;
+                        border-radius: 5px 5px 0 0;
+                    }
+                    .content {
+                        padding: 20px;
+                        background-color: #f9f9f9;
+                        border: 1px solid #ddd;
+                        border-top: none;
+                        border-radius: 0 0 5px 5px;
+                    }
+                    .order-details {
+                        background-color: white;
+                        padding: 15px;
+                        border-radius: 5px;
+                        margin-bottom: 20px;
+                    }
+                    .items-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin: 20px 0;
+                    }
+                    .items-table th, .items-table td {
+                        padding: 12px;
+                        text-align: left;
+                        border-bottom: 1px solid #ddd;
+                    }
+                    .items-table th {
+                        background-color: #f5f5f5;
+                    }
+                    .total-section {
+                        text-align: right;
+                        margin-top: 20px;
+                        padding-top: 20px;
+                        border-top: 2px solid #eee;
+                    }
+                    .footer {
+                        text-align: center;
+                        padding: 20px;
+                        color: #666;
+                        font-size: 14px;
+                        margin-top: 20px;
+                    }
+                    .button {
+                        display: inline-block;
+                        padding: 10px 20px;
+                        background-color: #4CAF50;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 5px;
+                        margin: 20px 0;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>Order Confirmation</h1>
+                        <p>Order ID: ${order.orderId}</p>
+                    </div>
+                    
+                    <div class="content">
+                        <p>Dear Customer,</p>
+                        <p>Thank you for your order! We're excited to confirm that your order has been successfully placed.</p>
+                        
+                        <div class="order-details">
+                            <h3>Order Details</h3>
+                            <p><strong>Order Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
+                            <p><strong>Delivery Address:</strong> ${order.address}, ${order.city}, ${order.state} - ${order.pincode}</p>
+                            <p><strong>Contact:</strong> ${order.mobile}</p>
+                        </div>
+
+                        <h3>Order Items</h3>
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${order.items.map(item => `
+                                    <tr>
+                                        <td>${item.name}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${item.price}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+
+                        <div class="total-section">
+                            <h3>Total Amount: ₹${order.totalAmount}</h3>
+                        </div>
+
+                        <div style="text-align: center;">
+                            <a href="${process.env.FRONTEND_URL}/track/${order._id}" class="button">View Order Details</a>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        <p>If you have any questions, please don't hesitate to contact us.</p>
+                        <p>Best regards,<br>RapidBite Team</p>
+                    </div>
+                </div>
+            </body>
+            </html>
         `;
 
         const mailOptions = {
