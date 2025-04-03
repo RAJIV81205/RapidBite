@@ -141,11 +141,11 @@ router.get('/admin/analytics', verifyToken, verifyAdmin, async (req, res) => {
 const sendEmail = async (email, subject, text, order) => {
     try {
         const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
+            host: 'smtp-relay.brevo.com',
+            port: 587,
+            secure: false,
             auth: {
-                user: 'oraxle81205@gmail.com',
+                user: '898553001@smtp-brevo.com',
                 pass: process.env.PASSWORD,
             },
         });
