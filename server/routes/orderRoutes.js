@@ -16,7 +16,7 @@ const generateOrderId = () => {
 
 router.post('/create-order', verifyToken, async (req, res) => {
     try {
-        const { items, totalAmount, address, city, state, pincode, mobile } = req.body;
+        const { items, totalAmount, address, city, state, pincode, mobile , paymentMethod } = req.body;
         
         const orderId = generateOrderId();
 
@@ -30,6 +30,7 @@ router.post('/create-order', verifyToken, async (req, res) => {
             state,
             pincode,
             mobile: parseFloat(parseFloat(mobile).toFixed(2)),
+            paymentMethod,
         });
 
         await newOrder.save();

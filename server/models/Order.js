@@ -16,6 +16,7 @@ const orderSchema = new mongoose.Schema({
     mobile: { type: Number, required: true },
     totalAmount: { type: Number, required: true },
     status: { type: String, default: 'pending' },
+    paymentMethod : { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });

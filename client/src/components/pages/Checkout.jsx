@@ -23,6 +23,58 @@ const Checkout = () => {
     state: "",
     paymentMethod: "cod",
   });
+  const [order_id, setOrder_ID] = useState(null);
+
+  const url = import.meta.env.VITE_BACKEND_URL;
+
+
+  const getOrderStatus = async () => {
+    const response = await fetch(`${url}/payment/get-order-status`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        order_id: order_id,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    if (data.order_status === "PAID") {
+      // Handle successful payment here 
+      const orderResponse = await fetch(`${url}/create-order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          items: cartItems,
+          totalAmount: total.toFixed(2),
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          pincode: formData.pincode,
+          mobile: formData.phone,
+          paymentMethod: "upi",
+        }),
+      });
+      const orderData = await orderResponse.json();
+      if (!orderResponse.ok) {
+        throw new Error("Failed to create order");
+      }
+      // Clear cart and redirect to profile
+      clearCart();
+      navigate(`/track/${orderData.newOrder._id}`);
+    } else {
+      // Handle payment failure here
+      alert("Payment failed. Please try again.");
+      console.log("Payment failed:", data);
+    }
+
+  };
+  
 
 
   let cashfree;
@@ -55,12 +107,12 @@ const Checkout = () => {
         console.log("Payment will be redirected");
       }
       if (result.paymentDetails) {
-        // This will be called whenever the payment is completed irrespective of transaction status
         console.log("Payment has been completed, Check for Payment Status");
         console.log(result.paymentDetails.paymentMessage);
-      }
-    });
-  };
+        getOrderStatus()
+    };
+  });
+}
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -236,6 +288,7 @@ const Checkout = () => {
         }
 
         console.log(paymentData);
+        setOrder_ID(paymentData.order_id);
         const sessionID = paymentData.payment_session_id;
         doPayment(sessionID);
       }
