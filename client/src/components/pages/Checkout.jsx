@@ -24,7 +24,7 @@ const Checkout = () => {
     state: "",
     paymentMethod: "cod",
   });
-  const [order_id, setOrder_ID] = useState("");
+  const [order_id, setOrderID] = useState("");
 
   const url = import.meta.env.VITE_BACKEND_URL;
 
@@ -308,7 +308,7 @@ const Checkout = () => {
         }
 
         console.log(paymentData);
-        setOrder_ID(paymentData.order_id);
+        setOrderID(paymentData.order_id);
         console.log(paymentData.order_id);
         console.log(order_id)
         const sessionID = paymentData.payment_session_id;
