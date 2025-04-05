@@ -171,7 +171,8 @@ const Checkout = () => {
   const cgst = subtotal * 0.09;
   const sgst = subtotal * 0.09;
   const deliveryCharge = subtotal < 250 ? 40 : 0;
-  const total = subtotal + cgst + sgst + deliveryCharge - discount;
+  const paymentGatewayCharge = formData.paymentMethod === "upi" ? (subtotal - discount) * 0.02 : 0;
+  const total = subtotal + cgst + sgst + deliveryCharge - discount + paymentGatewayCharge;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -361,6 +362,12 @@ const Checkout = () => {
                   <div className="flex justify-between text-gray-600">
                     <span>Delivery Charge</span>
                     <span>₹{deliveryCharge.toFixed(2)}</span>
+                  </div>
+                )}
+                {formData.paymentMethod === "upi" && (
+                  <div className="flex justify-between text-gray-600">
+                    <span>Payment Gateway Charges (2%)</span>
+                    <span>₹{paymentGatewayCharge.toFixed(2)}</span>
                   </div>
                 )}
                 <div className="border-t pt-3 mt-3">
