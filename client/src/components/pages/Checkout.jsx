@@ -31,6 +31,13 @@ const Checkout = () => {
 
   const getOrderStatus = async () => {
     console.log("Starting getOrderStatus with order_id:", order_id);
+    if (!order_id) {
+      console.error("No order_id available");
+      setShowOrderStatusLoader(false);
+      alert("No order ID found. Please try again.");
+      return;
+    }
+
     try {
       const response = await fetch(`${url}/payment/get-order-status`, {
         method: "POST",
@@ -302,6 +309,8 @@ const Checkout = () => {
 
         console.log(paymentData);
         setOrder_ID(paymentData.order_id);
+        console.log(paymentData.order_id);
+        console.log(order_id)
         const sessionID = paymentData.payment_session_id;
         doPayment(sessionID);
       }

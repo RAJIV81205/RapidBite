@@ -84,31 +84,44 @@ router.post("/get-order-status", verifyToken, async (req, res) => {
             headers: {
                 'x-api-version': '2023-08-01',
                 'x-client-id': process.env.CASHFREE_CLIENT_ID,
-                'x-client-secret': process.env.CASHFREE_SECRET_KEY,
+                'x-client-secret': process.env.CASHFREE_SECRET_KEY
             }
         };
 
         try {
-            console.log("Making request to Cashfree API...");
-            const response = await fetch(`https://api.cashfree.com/pg/orders/${order_id}`, options);
-            console.log("Cashfree API response status:", response.status);
-            const data = await response.json();
-            console.log("Cashfree API response data:", data);
-            
-            if (response.ok) {
-                if (data.order_status === 'PAID') {
-                    console.log("Order is PAID");
-                    return { success: true, data };
+            console.log("Making request to Cashfree API with options:", {
+                ...options,
+                headers: {
+                    ...options.headers,
+                    'x-client-secret': '***' // Hide the secret key in logs
                 }
-                console.log("Order status is not PAID:", data.order_status);
-                return { success: false, data };
-            } else {
-                console.error('Error fetching order status:', data);
-                return { success: false, error: data };
+            });
+
+            const response = await fetch(`https://api.cashfree.com/pg/orders/${order_id}`, options);
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Cashfree API Error Response:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    data: errorData
+                });
+                return { success: false, error: errorData };
             }
+
+            const data = await response.json();
+            console.log("Cashfree API Success Response:", data);
+            
+            if (data.order_status === 'PAID') {
+                console.log("Order is PAID");
+                return { success: true, data };
+            }
+            
+            console.log("Order status is not PAID:", data.order_status);
+            return { success: false, data };
         } catch (error) {
             console.error('Error in checkOrderStatus:', error);
-            return { success: false, error };
+            return { success: false, error: error.message };
         }
     };
 
