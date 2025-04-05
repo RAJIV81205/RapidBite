@@ -24,56 +24,70 @@ const Checkout = () => {
     state: "",
     paymentMethod: "cod",
   });
-  const [order_id, setOrder_ID] = useState(null);
+  const [order_id, setOrder_ID] = useState("");
 
   const url = import.meta.env.VITE_BACKEND_URL;
 
 
   const getOrderStatus = async () => {
-    const response = await fetch(`${url}/payment/get-order-status`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({
-        order_id: order_id,
-      }),
-    });
-    const data = await response.json();
-    console.log(data);
-    if (data.order_status === "PAID") {
-      // Handle successful payment here 
-      const orderResponse = await fetch(`${url}/create-order`, {
+    console.log("Starting getOrderStatus with order_id:", order_id);
+    try {
+      const response = await fetch(`${url}/payment/get-order-status`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          items: cartItems,
-          totalAmount: total.toFixed(2),
-          address: formData.address,
-          city: formData.city,
-          state: formData.state,
-          pincode: formData.pincode,
-          mobile: formData.phone,
-          paymentMethod: "upi",
+          order_id: order_id,
         }),
       });
-      const orderData = await orderResponse.json();
-      if (!orderResponse.ok) {
-        throw new Error("Failed to create order");
+      console.log("Order status response status:", response.status);
+      const data = await response.json();
+      console.log("Order status response data:", data);
+      
+      if (data.order_status === "PAID") {
+        console.log("Payment successful, creating order...");
+        // Handle successful payment here 
+        const orderResponse = await fetch(`${url}/create-order`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            items: cartItems,
+            totalAmount: total.toFixed(2),
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode,
+            mobile: formData.phone,
+            paymentMethod: "upi",
+          }),
+        });
+        console.log("Create order response status:", orderResponse.status);
+        const orderData = await orderResponse.json();
+        console.log("Create order response data:", orderData);
+        
+        if (!orderResponse.ok) {
+          throw new Error("Failed to create order");
+        }
+        // Clear cart and redirect to profile
+        clearCart();
+        setShowOrderStatusLoader(false);
+        navigate(`/track/${orderData.newOrder._id}`);
+      } else {
+        // Handle payment failure here
+        console.error("Payment failed with status:", data.order_status);
+        setShowOrderStatusLoader(false);
+        alert("Payment failed. Please try again.");
       }
-      // Clear cart and redirect to profile
-      clearCart();
-      navigate(`/track/${orderData.newOrder._id}`);
-    } else {
-      // Handle payment failure here
-      alert("Payment failed. Please try again.");
-      console.log("Payment failed:", data);
+    } catch (error) {
+      console.error("Error in getOrderStatus:", error);
+      setShowOrderStatusLoader(false);
+      alert("An error occurred while checking payment status. Please try again.");
     }
-
   };
   
 
@@ -88,34 +102,30 @@ const Checkout = () => {
 
 
   const doPayment = async (sessionID) => {
-        
+    console.log("Starting payment with sessionID:", sessionID);
     let checkoutOptions = {
       paymentSessionId: sessionID,
       redirectTarget: "_modal",
     };
     cashfree.checkout(checkoutOptions).then((result) => {
+      console.log("Payment result:", result);
       if (result.error) {
-        // This will be true whenever user clicks on close icon inside the modal or any error happens during the payment
-        console.log(
-          "User has closed the popup or there is some payment error, Check for Payment Status"
-        );
-        console.log(result.error);
+        console.error("Payment error:", result.error);
+        setShowOrderStatusLoader(false);
       }
       if (result.redirect) {
-        // This will be true when the payment redirection page couldnt be opened in the same window
-        // This is an exceptional case only when the page is opened inside an inAppBrowser
-        // In this case the customer will be redirected to return url once payment is completed
         console.log("Payment will be redirected");
       }
       if (result.paymentDetails) {
-        console.log("Payment has been completed, Check for Payment Status");
-        console.log(result.paymentDetails.paymentMessage);
-        
+        console.log("Payment completed, details:", result.paymentDetails);
         setShowOrderStatusLoader(true);
         getOrderStatus();
-    };
-  });
-}
+      }
+    }).catch((error) => {
+      console.error("Error in payment process:", error);
+      setShowOrderStatusLoader(false);
+    });
+  };
 
   useEffect(() => {
     const checkAuth = async () => {

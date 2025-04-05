@@ -73,10 +73,12 @@ router.post("/create-checkout-session", verifyToken, async (req, res) => {
 
 router.post("/get-order-status", verifyToken, async (req, res) => {
     const { order_id } = req.body;
+    console.log("Received order status request for order_id:", order_id);
     const maxAttempts = 12; // Check every 5 seconds for 1 minute (12 attempts)
     let attempts = 0;
 
     const checkOrderStatus = async () => {
+        console.log(`Attempt ${attempts + 1} to check order status for order_id:`, order_id);
         const options = {
             method: 'GET',
             headers: {
@@ -87,13 +89,18 @@ router.post("/get-order-status", verifyToken, async (req, res) => {
         };
 
         try {
+            console.log("Making request to Cashfree API...");
             const response = await fetch(`https://api.cashfree.com/pg/orders/${order_id}`, options);
+            console.log("Cashfree API response status:", response.status);
             const data = await response.json();
+            console.log("Cashfree API response data:", data);
             
             if (response.ok) {
                 if (data.order_status === 'PAID') {
+                    console.log("Order is PAID");
                     return { success: true, data };
                 }
+                console.log("Order status is not PAID:", data.order_status);
                 return { success: false, data };
             } else {
                 console.error('Error fetching order status:', data);
@@ -107,23 +114,29 @@ router.post("/get-order-status", verifyToken, async (req, res) => {
 
     try {
         while (attempts < maxAttempts) {
+            console.log(`Starting attempt ${attempts + 1} of ${maxAttempts}`);
             const result = await checkOrderStatus();
             
             if (result.success && result.data.order_status === 'PAID') {
+                console.log("Payment successful, returning response");
                 return res.status(200).json(result.data);
             }
             
             attempts++;
             if (attempts < maxAttempts) {
-                await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds before next attempt
+                console.log(`Waiting 5 seconds before next attempt...`);
+                await new Promise(resolve => setTimeout(resolve, 5000));
             }
         }
 
         // If we've exhausted all attempts
+        console.log("All attempts exhausted, making final check");
         const finalCheck = await checkOrderStatus();
         if (finalCheck.success) {
+            console.log("Final check successful, returning status:", finalCheck.data.order_status);
             res.status(200).json(finalCheck.data);
         } else {
+            console.error("Final check failed:", finalCheck);
             res.status(400).json({ 
                 message: 'Order status check timed out', 
                 finalStatus: finalCheck.data?.order_status || 'UNKNOWN' 
