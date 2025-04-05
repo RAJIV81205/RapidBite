@@ -26,6 +26,7 @@ const Checkout = () => {
   });
   const [order_id, setOrderID] = useState("");
   const [paymentData, setPaymentData] = useState(null);
+  const [cashfree, setCashfree] = useState(null);
 
   const url = import.meta.env.VITE_BACKEND_URL;
 
@@ -99,35 +100,52 @@ const Checkout = () => {
   
 
 
-  let cashfree;
-  var initializeSDK = async function () {
-    cashfree = await load({
-      mode: "production",
-    });
-  };
-  initializeSDK();
-
+  useEffect(() => {
+    const initializeSDK = async () => {
+      try {
+        const cashfreeInstance = await load({
+          mode: "production"
+        });
+        console.log("Cashfree SDK initialized");
+        setCashfree(cashfreeInstance);
+      } catch (error) {
+        console.error("Error initializing Cashfree SDK:", error);
+      }
+    };
+    initializeSDK();
+  }, []);
 
   const doPayment = async (sessionID) => {
     console.log("Starting payment with sessionID:", sessionID);
-    let checkoutOptions = {
-      paymentSessionId: sessionID,
-      redirectTarget: "_modal",
-    };
-    cashfree.checkout(checkoutOptions).then((result) => {
+    if (!cashfree) {
+      console.error("Cashfree SDK not initialized");
+      alert("Payment system not ready. Please try again.");
+      setShowOrderStatusLoader(false);
+      return;
+    }
+
+    try {
+      let checkoutOptions = {
+        paymentSessionId: sessionID,
+        redirectTarget: "_modal",
+      };
+      
+      const result = await cashfree.checkout(checkoutOptions);
       console.log("Payment result:", result);
+      
       if (result.error) {
         console.error("Payment error:", result.error);
         setShowOrderStatusLoader(false);
         return;
       }
+      
       if (result.redirect) {
         console.log("Payment will be redirected");
       }
+      
       if (result.paymentDetails) {
         console.log("Payment completed, details:", result.paymentDetails);
         setShowOrderStatusLoader(true);
-        // Use the order_id from the state
         if (order_id) {
           getOrderStatus();
         } else {
@@ -136,10 +154,11 @@ const Checkout = () => {
           alert("Payment completed but order ID not found. Please contact support.");
         }
       }
-    }).catch((error) => {
+    } catch (error) {
       console.error("Error in payment process:", error);
       setShowOrderStatusLoader(false);
-    });
+      alert("Payment failed. Please try again.");
+    }
   };
 
   useEffect(() => {
