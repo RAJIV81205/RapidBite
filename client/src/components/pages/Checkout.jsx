@@ -80,7 +80,7 @@ const Checkout = () => {
   let cashfree;
   var initializeSDK = async function () {
     cashfree = await load({
-      mode: "sandbox",
+      mode: "production",
     });
   };
   initializeSDK();

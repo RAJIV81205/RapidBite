@@ -52,7 +52,7 @@ router.post("/create-checkout-session", verifyToken, async (req, res) => {
             }
         });
 
-        const response = await fetch('https://sandbox.cashfree.com/pg/orders', options);
+        const response = await fetch('https://api.cashfree.com/pg/orders', options);
         const data = await response.json();
 
         if (response.ok) {
@@ -84,7 +84,7 @@ router.post("/get-order-status", verifyToken, async (req, res) => {
     };
 
     try {
-        const response = await fetch(`https://sandbox.cashfree.com/pg/orders/${order_id}`, options)
+        const response = await fetch(`https://api.cashfree.com/pg/orders/${order_id}`, options)
         const data = await response.json()
         console.log(data)
         if (response.ok) {
