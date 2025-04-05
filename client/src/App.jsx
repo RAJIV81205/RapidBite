@@ -5,6 +5,10 @@ import Footer from "./components/Footer";
 import { BrowserRouter as Router, Route, Routes, Outlet } from "react-router";
 import ScrollToTop from "./components/ScrollToTop";
 import NotFound from "./components/pages/404";
+import Condition from "./components/pages/Terms/Condition";
+import Refund from "./components/pages/Terms/Refund";
+import Contact from "./components/pages/Terms/Contact";
+
 
 // Lazy load components
 const Home = React.lazy(() => import("./components/pages/Home"));
@@ -48,6 +52,10 @@ function App() {
               <Route path="products" element={<Products />} />
               <Route path="orders" element={<Orders />} />
             </Route>
+
+            <Route path="/terms/condition" element={<Condition />} />
+            <Route path="/terms/refund" element={<Refund />} />
+            <Route path="/terms/contact" element={<Contact />} />
 
             {/* Fallback Route */}
             <Route path="*" element={<NotFound />} />

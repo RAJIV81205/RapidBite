@@ -53,9 +53,10 @@ const Footer = () => {
             <h4 className="text-lg font-semibold">Quick Links</h4>
             <ul className="space-y-2">
               <li><Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
-              <li><Link to="/menu" className="text-gray-400 hover:text-white transition-colors">Menu</Link></li>
-              <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
+
+              <li><Link to="/terms/condition" className="text-gray-400 hover:text-white transition-colors">Condition</Link></li>
+              <li><Link to="/terms/refund" className="text-gray-400 hover:text-white transition-colors">Refund Policy</Link></li>
+              <li><Link to="/terms/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
             </ul>
           </motion.div>
 
@@ -63,12 +64,11 @@ const Footer = () => {
           <motion.div variants={itemVariants} className="space-y-4">
             <h4 className="text-lg font-semibold">Contact Us</h4>
             <ul className="space-y-2 text-gray-400">
-              <li>123 Food Street</li>
-              <li>City, State 12345</li>
-              <li>Phone: (123) 456-7890</li>
-              <li>Email: info@rapidbite.com</li>
+              <li>Asansol , West Bengal , India - 713301</li>
+              <li>Email: lucky81205login@gmail.com</li>
             </ul>
           </motion.div>
+
 
           {/* Social Links */}
           <motion.div variants={itemVariants} className="space-y-4">
