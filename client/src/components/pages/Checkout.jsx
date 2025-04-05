@@ -13,6 +13,7 @@ const Checkout = () => {
   const [cityOptions, setCityOptions] = useState([]);
   const [pincodeError, setPincodeError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showOrderStatusLoader, setShowOrderStatusLoader] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -109,7 +110,9 @@ const Checkout = () => {
       if (result.paymentDetails) {
         console.log("Payment has been completed, Check for Payment Status");
         console.log(result.paymentDetails.paymentMessage);
-        getOrderStatus()
+        
+        setShowOrderStatusLoader(true);
+        getOrderStatus();
     };
   });
 }
@@ -330,6 +333,14 @@ const Checkout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 font-poppins mt-16">
+      {showOrderStatusLoader && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mb-4"></div>
+            <p className="text-lg font-semibold">Fetching payment status</p>
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Side - Cart Items */}
