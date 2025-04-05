@@ -119,6 +119,7 @@ const Checkout = () => {
       if (result.error) {
         console.error("Payment error:", result.error);
         setShowOrderStatusLoader(false);
+        return;
       }
       if (result.redirect) {
         console.log("Payment will be redirected");
@@ -126,7 +127,14 @@ const Checkout = () => {
       if (result.paymentDetails) {
         console.log("Payment completed, details:", result.paymentDetails);
         setShowOrderStatusLoader(true);
-        getOrderStatus();
+        // Use the order_id from the state
+        if (order_id) {
+          getOrderStatus();
+        } else {
+          console.error("No order_id available for status check");
+          setShowOrderStatusLoader(false);
+          alert("Payment completed but order ID not found. Please contact support.");
+        }
       }
     }).catch((error) => {
       console.error("Error in payment process:", error);
@@ -309,10 +317,12 @@ const Checkout = () => {
 
         console.log(paymentData);
         setOrderID(paymentData.order_id);
-        console.log(paymentData.order_id);
-        console.log(order_id)
-        const sessionID = paymentData.payment_session_id;
-        doPayment(sessionID);
+        // Wait for the state to update before proceeding
+        setTimeout(() => {
+          console.log("Current order_id:", order_id);
+          const sessionID = paymentData.payment_session_id;
+          doPayment(sessionID);
+        }, 0);
       }
     } catch (error) {
       console.error("Error:", error);
