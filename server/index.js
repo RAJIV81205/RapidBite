@@ -5,6 +5,7 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 
 const app = express();
 
@@ -25,7 +26,7 @@ connectDB();
 app.use('/api', userRoutes);
 app.use('/api', orderRoutes);
 app.use('/api', productRoutes);
-
+app.use('/api/payment', paymentRoutes);
 
 // Start server
 app.listen(process.env.PORT, () => {
