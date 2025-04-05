@@ -222,7 +222,7 @@ const Checkout = () => {
   const discount = subtotal * 0.1;
   const cgst = subtotal * 0.09;
   const sgst = subtotal * 0.09;
-  const deliveryCharge = subtotal < 250 ? 40 : 0;
+  const deliveryCharge = 0;
   const paymentGatewayCharge = formData.paymentMethod === "upi" ? (subtotal - discount) * 0.02 : 0;
   const total = subtotal + cgst + sgst + deliveryCharge - discount + paymentGatewayCharge;
 
