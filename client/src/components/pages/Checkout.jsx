@@ -25,9 +25,9 @@ const Checkout = () => {
     paymentMethod: "cod",
   });
   const [order_id, setOrderID] = useState("");
+  const [paymentData, setPaymentData] = useState(null);
 
   const url = import.meta.env.VITE_BACKEND_URL;
-
 
   const getOrderStatus = async () => {
     console.log("Starting getOrderStatus with order_id:", order_id);
@@ -254,6 +254,15 @@ const Checkout = () => {
   const paymentGatewayCharge = formData.paymentMethod === "upi" ? (subtotal - discount) * 0.02 : 0;
   const total = subtotal + cgst + sgst + deliveryCharge - discount + paymentGatewayCharge;
 
+  // Add useEffect to handle payment when order_id changes
+  useEffect(() => {
+    if (order_id && paymentData) {
+      console.log("Order ID updated, proceeding with payment:", order_id);
+      const sessionID = paymentData.payment_session_id;
+      doPayment(sessionID);
+    }
+  }, [order_id, paymentData]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -315,14 +324,9 @@ const Checkout = () => {
           throw new Error("Failed to create payment session");
         }
 
-        console.log(paymentData);
+        console.log("Payment data received:", paymentData);
+        setPaymentData(paymentData);
         setOrderID(paymentData.order_id);
-        // Wait for the state to update before proceeding
-        setTimeout(() => {
-          console.log("Current order_id:", order_id);
-          const sessionID = paymentData.payment_session_id;
-          doPayment(sessionID);
-        }, 0);
       }
     } catch (error) {
       console.error("Error:", error);
