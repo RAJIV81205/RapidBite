@@ -279,6 +279,7 @@ const Checkout = () => {
       console.log("Order ID updated, proceeding with payment:", order_id);
       const sessionID = paymentData.payment_session_id;
       doPayment(sessionID);
+      
     }
   }, [order_id, paymentData]);
 
@@ -676,7 +677,7 @@ const Checkout = () => {
                       >
                         <div className="text-center">
                           <span className="block font-medium">
-                            Cash on Delivery
+                            COD
                           </span>
                           <span className="text-sm text-gray-500">
                             Pay when you receive
@@ -696,14 +697,10 @@ const Checkout = () => {
                       />
                       <label
                         htmlFor="upi"
-                        className="flex items-center justify-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-green-500 peer-checked:bg-green-50"
+                        className="flex items-center justify-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-green-500 peer-checked:bg-green-50 "
                       >
-                        <div className="text-center">
-                          <span className="block font-medium">UPI Payment</span>
-                          <span className="text-sm text-gray-500">
-                            Pay instantly
-                          </span>
-                        </div>
+                       
+                        <img src="/bhim.png" alt="bhim"  className="h-12"/>
                       </label>
                     </div>
                   </div>
