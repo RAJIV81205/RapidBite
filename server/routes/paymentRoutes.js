@@ -117,7 +117,7 @@ router.post("/get-order-status", verifyToken, async (req, res) => {
                 return { success: true, data };
             }
             
-            console.log("Order status is not PAID:", data.order_status);
+            console.log("Order status is:", data.order_status);
             return { success: false, data };
         } catch (error) {
             console.error('Error in checkOrderStatus:', error);
@@ -133,6 +133,11 @@ router.post("/get-order-status", verifyToken, async (req, res) => {
             if (result.success && result.data.order_status === 'PAID') {
                 console.log("Payment successful, returning response");
                 return res.status(200).json(result.data);
+            }
+            
+            if (result.data?.order_status !== 'ACTIVE') {
+                console.log("Order status is not ACTIVE, stopping further attempts.");
+                break;
             }
             
             attempts++;
