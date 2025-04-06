@@ -673,16 +673,9 @@ const Checkout = () => {
                       />
                       <label
                         htmlFor="cod"
-                        className="flex items-center justify-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-green-500 peer-checked:bg-green-50"
+                        className="flex items-center justify-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-green-500 peer-checked:bg-green-50 h-20 overflow-hidden"
                       >
-                        <div className="text-center">
-                          <span className="block font-medium">
-                            COD
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            Pay when you receive
-                          </span>
-                        </div>
+                        <span className="text-lg font-semibold text-gray-900">Cash on Delivery</span>
                       </label>
                     </div>
                     <div className="relative">
@@ -697,7 +690,7 @@ const Checkout = () => {
                       />
                       <label
                         htmlFor="upi"
-                        className="flex items-center justify-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-green-500 peer-checked:bg-green-50 "
+                        className="flex items-center justify-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-green-500 peer-checked:bg-green-50 h-20 overflow-hidden"
                       >
                        
                         <img src="/bhim.png" alt="bhim"  className="h-12"/>
