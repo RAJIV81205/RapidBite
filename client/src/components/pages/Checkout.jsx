@@ -53,7 +53,7 @@ const Checkout = () => {
       console.log("Order status response status:", response.status);
       const data = await response.json();
       console.log("Order status response data:", data);
-      
+
       if (data.order_status === "PAID") {
         console.log("Payment successful, creating order...");
         // Handle successful payment here 
@@ -77,7 +77,7 @@ const Checkout = () => {
         console.log("Create order response status:", orderResponse.status);
         const orderData = await orderResponse.json();
         console.log("Create order response data:", orderData);
-        
+
         if (!orderResponse.ok) {
           throw new Error("Failed to create order");
         }
@@ -97,7 +97,7 @@ const Checkout = () => {
       alert("An error occurred while checking payment status. Please try again.");
     }
   };
-  
+
 
 
   useEffect(() => {
@@ -129,20 +129,20 @@ const Checkout = () => {
         paymentSessionId: sessionID,
         redirectTarget: "_modal",
       };
-      
+
       const result = await cashfree.checkout(checkoutOptions);
       console.log("Payment result:", result);
-      
+
       if (result.error) {
         console.error("Payment error:", result.error);
         setShowOrderStatusLoader(false);
         return;
       }
-      
+
       if (result.redirect) {
         console.log("Payment will be redirected");
       }
-      
+
       if (result.paymentDetails) {
         console.log("Payment completed, details:", result.paymentDetails);
         setShowOrderStatusLoader(true);
@@ -279,7 +279,7 @@ const Checkout = () => {
       console.log("Order ID updated, proceeding with payment:", order_id);
       const sessionID = paymentData.payment_session_id;
       doPayment(sessionID);
-      
+
     }
   }, [order_id, paymentData]);
 
@@ -572,9 +572,8 @@ const Checkout = () => {
                         maxLength={6}
                         pattern="[0-9]{6}"
                         placeholder=" "
-                        className={`block w-full px-4 py-3 text-black bg-transparent border-2 ${
-                          pincodeError ? "border-red-500" : "border-gray-200"
-                        } rounded-lg appearance-none focus:outline-none focus:border-green-500 peer pr-10`}
+                        className={`block w-full px-4 py-3 text-black bg-transparent border-2 ${pincodeError ? "border-red-500" : "border-gray-200"
+                          } rounded-lg appearance-none focus:outline-none focus:border-green-500 peer pr-10`}
                       />
                       {isPincodeLoading && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -692,8 +691,8 @@ const Checkout = () => {
                         htmlFor="upi"
                         className="flex items-center justify-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-green-500 peer-checked:bg-green-50 h-20 overflow-hidden"
                       >
-                       
-                        <img src="/bhim.png" alt="bhim"  className="h-12"/>
+
+                        <img src="/bhim.png" alt="bhim" className="h-12" />
                       </label>
                     </div>
                   </div>
@@ -702,11 +701,10 @@ const Checkout = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full py-4 rounded-lg font-semibold mt-6 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all ${
-                    isSubmitting
+                  className={`w-full py-4 rounded-lg font-semibold mt-6 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all ${isSubmitting
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-green-600 hover:bg-green-700 text-white"
-                  }`}
+                    }`}
                 >
                   {isSubmitting ? (
                     <div className="flex items-center justify-center">
