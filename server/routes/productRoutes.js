@@ -87,9 +87,28 @@ router.get('/get-products', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}); 
+});
 
+// Search products
+router.get('/search', async (req, res) => {
+    try {
+        const { query } = req.query;
+        if (!query) {
+            return res.status(400).json({ message: "Search query is required" });
+        }
 
+        const products = await Product.find({
+            $or: [
+                { name: { $regex: query, $options: 'i' } },
+                { category: { $regex: query, $options: 'i' } }
+            ]
+        }).limit(10);
+
+        res.status(200).json({ products });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 export default router;
 

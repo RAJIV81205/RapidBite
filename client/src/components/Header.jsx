@@ -1,10 +1,11 @@
 import { User, Search, ShoppingCart, MapPin, Bell } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useCart } from "./CartContext";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { HeaderSkeleton } from "./Skeletons";
 import React from 'react';
+
 
 // Memoized location button component
 const LocationButton = React.memo(({ userLocation }) => (
@@ -45,14 +46,18 @@ const ProfileButton = React.memo(({ isLoggedIn, user }) => (
 
 const Header = () => {
   const currentLocation = useLocation();
+  const navigate = useNavigate();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [userLocation, setUserLocation] = useState("Searching for location...");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { getCartCount, toggleCart } = useCart();
+  const { getCartCount, toggleCart, addToCart } = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+
 
   const token = localStorage.getItem("token");
   const url = import.meta.env.VITE_BACKEND_URL;
@@ -151,12 +156,53 @@ const Header = () => {
     },
   }), []);
 
-  const handleSearchChange = useCallback((e) => {
+  const handleSearch = useCallback(async (query) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      setIsSearching(true);
+      const response = await fetch(`${url}/search?query=${encodeURIComponent(query)}`);
+      if (!response.ok) {
+        throw new Error('Search failed');
+      }
+      const data = await response.json();
+      setSearchResults(data.products);
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, [url]);
+
+  const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    // Implement your search logic here
-    console.log('Searching for:', query);
-  }, []);
+    handleSearch(query);
+  };
+
+  const handleSuggestionClick = (product) => {
+    setSearchQuery("");
+    setSearchResults([]);
+    navigate(`/items/${product.category}`);
+  };
+
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    addToCart({
+      id: product._id,
+      name: product.name,
+      image: product.image,
+      price: product.discountPrice,
+      originalPrice: product.originalPrice,
+      quantity: product.quantity,
+      weight: product.weight,
+      volume: product.volume
+    });
+  };
 
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(prev => !prev);
@@ -202,7 +248,7 @@ const Header = () => {
 
         {/* Center Section - Search */}
         <motion.div
-          className="flex-1 max-w-2xl mx-4 sm:mx-8 hidden sm:block"
+          className="flex-1 max-w-2xl mx-4 sm:mx-8 hidden sm:block relative"
           variants={itemVariants}
         >
           <div
@@ -218,9 +264,49 @@ const Header = () => {
               placeholder="What would you like to eat?"
               className="w-full h-12 rounded-full border-2 border-neutral-200 pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-base placeholder:text-neutral-400"
               onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
+              onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
             />
           </div>
+
+          {/* Search Results Dropdown */}
+          <AnimatePresence>
+            {isSearchFocused && searchResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-neutral-200 max-h-[400px] overflow-y-auto z-50"
+              >
+                {searchResults.map((product) => (
+                  <div
+                    key={product._id}
+                    onClick={() => handleSuggestionClick(product)}
+                    className="flex items-center gap-4 p-3 hover:bg-neutral-50 cursor-pointer border-b border-neutral-100 last:border-b-0"
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-12 h-12 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-medium text-neutral-800">{product.name}</h3>
+                      <p className="text-sm text-neutral-500">{product.category}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-green-600 font-medium">₹{product.discountPrice}</span>
+                        <span className="text-sm text-neutral-400 line-through">₹{product.originalPrice}</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={(e) => handleAddToCart(e, product)}
+                      className="bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-green-700 transition-colors"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {/* Right Section */}
@@ -288,6 +374,45 @@ const Header = () => {
             placeholder="What would you like to eat?"
             className="w-full h-12 rounded-full border-2 border-neutral-200 pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-base placeholder:text-neutral-400"
           />
+          {/* Mobile Search Results */}
+          <AnimatePresence>
+            {searchResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-neutral-200 max-h-[400px] overflow-y-auto z-50"
+              >
+                {searchResults.map((product) => (
+                  <div
+                    key={product._id}
+                    onClick={() => handleSuggestionClick(product)}
+                    className="flex items-center gap-4 p-3 hover:bg-neutral-50 cursor-pointer border-b border-neutral-100 last:border-b-0"
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-12 h-12 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-medium text-neutral-800">{product.name}</h3>
+                      <p className="text-sm text-neutral-500">{product.category}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-green-600 font-medium">₹{product.discountPrice}</span>
+                        <span className="text-sm text-neutral-400 line-through">₹{product.originalPrice}</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={(e) => handleAddToCart(e, product)}
+                      className="bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-green-700 transition-colors"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
 
