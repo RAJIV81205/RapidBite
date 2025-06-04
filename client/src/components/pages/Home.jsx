@@ -388,7 +388,7 @@ const Home = () => {
                       />
                       {product.discount !== '0% off' && (
                         <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-medium">
-                          {product.discount}
+                          {Math.round(parseInt(product.discount))}% off
                         </div>
                       )}
                       {!product.inStock && (
