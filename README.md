@@ -1,6 +1,6 @@
 # RapidBite 🛒
 
-A modern, full-stack e-commerce platform for fresh groceries with real-time delivery tracking and a seamless shopping experience.
+A modern, full-stack e-commerce platform for fresh groceries with real-time delivery tracking and a seamless shopping experience./*
 
 ---
 
