@@ -155,7 +155,7 @@ rapidbite/
 - **Analytics**  
   ![Analytics](screenshots/analytics.png)
 
-  - **Product Management**  
+- **Product Management**  
   ![Product Management](screenshots/product-management.png)
 
 - **Order Management**  
