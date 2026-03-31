@@ -21,6 +21,7 @@ const Dashboard = React.lazy(() => import('./components/pages/Admin/Dashboard'))
 const Products = React.lazy(() => import('./components/pages/Admin/Products'));
 const Orders = React.lazy(() => import('./components/pages/Admin/Orders'));
 const Analytics = React.lazy(() => import('./components/pages/Admin/Analytics'));
+const IRCTCCashfreePayment = React.lazy(() => import('./components/pages/IRCTCCashfreePayment'));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -56,6 +57,8 @@ function App() {
             <Route path="/terms/condition" element={<Condition />} />
             <Route path="/terms/refund" element={<Refund />} />
             <Route path="/terms/contact" element={<Contact />} />
+
+            <Route path="/irctc-connect/orderData" element={<IRCTCCashfreePayment />} />
 
             {/* Fallback Route */}
             <Route path="*" element={<NotFound />} />
