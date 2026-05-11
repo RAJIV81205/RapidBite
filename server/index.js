@@ -13,7 +13,7 @@ dotenv.config();
 
 // Middleware
 app.use(cors({
-    origin: ["https://rapidbite.rajivdubey.tech" , "https://rapidbite.vercel.app/"],
+    origin: ["https://rapidbite.rajivdubey.tech" , "https://rapidbite.vercel.app"],
     credentials: true,
 }));
 
